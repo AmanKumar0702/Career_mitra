@@ -73,13 +73,13 @@ export default function ResumePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e]">
       <Navbar />
-
       {/* Hero */}
-      <div className="bg-gradient-to-r from-pink-600 to-rose-600 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-extrabold mb-2">Resume Builder 📄</h1>
+      <div className="bg-gradient-to-r from-pink-600 via-pink-700 to-rose-600 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <span className="inline-block text-xs font-semibold uppercase tracking-widest text-pink-200 mb-3">Resume Builder</span>
+          <h1 className="text-4xl font-extrabold mb-2">Resume Builder</h1>
           <p className="text-pink-100 text-lg">Build a professional resume in minutes — free, no sign-up required</p>
         </div>
       </div>
@@ -97,7 +97,7 @@ export default function ResumePage() {
           </div>
           <div className="flex gap-2">
             <button onClick={() => setPreview(!preview)} className="btn-secondary flex items-center gap-2">
-              <FileText className="w-4 h-4" /> {preview ? "✏️ Edit" : "👁️ Preview"}
+              <FileText className="w-4 h-4" /> {preview ? "Edit" : "Preview"}
             </button>
             <button
               onClick={() => { if (typeof window !== "undefined") { window.print(); } toast.success("Opening print dialog..."); }}
@@ -261,7 +261,7 @@ export default function ResumePage() {
           /* Resume Preview */
           <div className="max-w-3xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden print:shadow-none print:rounded-none">
             {/* Header */}
-            <div className="bg-gradient-to-r from-primary-600 to-purple-600 text-white p-8">
+            <div className="bg-gradient-to-r from-cyan-600 to-indigo-600 text-white p-8">
               <h1 className="text-3xl font-extrabold mb-1">{resume.name || "Your Name"}</h1>
               <div className="flex flex-wrap gap-4 text-sm text-primary-100">
                 {resume.email && <span className="flex items-center gap-1"><Mail className="w-3.5 h-3.5" />{resume.email}</span>}

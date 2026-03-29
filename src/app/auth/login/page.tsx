@@ -43,10 +43,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-purple-50 dark:from-gray-950 dark:to-gray-900 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#050810] bg-grid p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-primary-600 font-bold text-2xl mb-2">
+          <Link href="/" className="inline-flex items-center gap-2 text-cyan-500 font-bold text-2xl mb-2">
             <GraduationCap className="w-8 h-8" /> CareerMitra
           </Link>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mt-4">Welcome back</h1>
@@ -130,9 +130,9 @@ export default function LoginPage() {
           )}
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+          <p className="text-center text-sm text-gray-500 mt-6">
           Don&apos;t have an account?{" "}
-          <Link href="/auth/signup" className="text-primary-600 font-medium hover:underline">
+          <Link href="/auth/signup" className="text-cyan-500 font-medium hover:underline">
             Sign up free
           </Link>
         </p>

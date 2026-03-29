@@ -5,42 +5,95 @@ import { ArrowRight, Sparkles } from "lucide-react";
 
 export default function CTASection() {
   return (
-    <section className="py-24 bg-white dark:bg-gray-950">
+    <section className="py-24 bg-gray-50 dark:bg-[#0d1526] overflow-hidden">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 40, scale: 0.97 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
           viewport={{ once: true }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary-600 via-primary-700 to-purple-700 p-12 text-center shadow-2xl"
+          className="relative overflow-hidden rounded-3xl p-12 text-center"
+          style={{
+            background: "linear-gradient(135deg, #0891b2 0%, #0e7490 40%, #4f46e5 100%)",
+            boxShadow: "0 20px 60px rgba(6,182,212,0.3)",
+          }}
         >
-          {/* Background decoration */}
-          <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2" />
-          <div className="absolute bottom-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-1/2 translate-y-1/2" />
+          {/* Animated floating orbs */}
+          <motion.div
+            animate={{ x: [0, 20, 0], y: [0, -15, 0], scale: [1, 1.1, 1] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+          />
+          <motion.div
+            animate={{ x: [0, -20, 0], y: [0, 15, 0], scale: [1, 1.15, 1] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute bottom-0 right-0 w-64 h-64 bg-white/5 rounded-full translate-x-1/2 translate-y-1/2 pointer-events-none"
+          />
+
+          {/* Shimmer line */}
+          <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)" }} />
 
           <div className="relative">
-            <span className="inline-flex items-center gap-2 bg-white/10 text-white text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-              <Sparkles className="w-4 h-4" /> Join 50,000+ students already learning
-            </span>
-            <h2 className="text-4xl sm:text-5xl font-extrabold text-white mb-4 leading-tight">
+            <motion.span
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 bg-white/10 text-white text-sm font-medium px-4 py-1.5 rounded-full mb-6 border border-white/20"
+            >
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              >
+                <Sparkles className="w-4 h-4" />
+              </motion.div>
+              Join 50,000+ students already learning
+            </motion.span>
+
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="text-4xl sm:text-5xl font-extrabold text-white mb-4 leading-tight"
+            >
               Your Career Journey<br />Starts Today
-            </h2>
-            <p className="text-primary-100 text-lg mb-8 max-w-xl mx-auto">
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              viewport={{ once: true }}
+              className="text-cyan-100 text-lg mb-8 max-w-xl mx-auto"
+            >
               Free to start. No credit card required. Get access to 500+ courses, career roadmaps, and job listings instantly.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/auth/signup"
-                className="inline-flex items-center justify-center gap-2 bg-white text-primary-700 font-bold px-8 py-3.5 rounded-xl hover:bg-primary-50 transition-all shadow-lg hover:shadow-xl"
-              >
-                Get Started Free <ArrowRight className="w-5 h-5" />
-              </Link>
-              <Link
-                href="/learn"
-                className="inline-flex items-center justify-center gap-2 bg-white/10 text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-white/20 transition-all border border-white/20"
-              >
-                Browse Courses
-              </Link>
-            </div>
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+            >
+              <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+                <Link
+                  href="/auth/signup"
+                  className="inline-flex items-center justify-center gap-2 bg-white text-cyan-700 font-bold px-8 py-3.5 rounded-xl hover:bg-cyan-50 transition-all shadow-lg hover:shadow-xl"
+                >
+                  Get Started Free <ArrowRight className="w-5 h-5" />
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+                <Link
+                  href="/learn"
+                  className="inline-flex items-center justify-center gap-2 bg-white/10 text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-white/20 transition-all border border-white/20"
+                >
+                  Browse Courses
+                </Link>
+              </motion.div>
+            </motion.div>
           </div>
         </motion.div>
       </div>

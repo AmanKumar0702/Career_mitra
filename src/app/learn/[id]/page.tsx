@@ -50,7 +50,7 @@ export default function CourseStudyPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       setEnrolled(true);
-      toast.success("Enrolled! +50 XP 🎉");
+      toast.success("Enrolled! +50 XP");
     } catch (err: any) {
       toast.error(err.message || "Enrollment failed");
     } finally {
@@ -63,23 +63,23 @@ export default function CourseStudyPage() {
     const updated = [...completedLessons, index];
     setCompletedLessons(updated);
     localStorage.setItem(`course-progress-${id}`, JSON.stringify(updated));
-    toast.success("Lesson completed! ✓");
+      toast.success("Lesson completed");
     if (index < (course?.lessons?.length || 0) - 1) {
       setTimeout(() => setActiveLesson(index + 1), 500);
     }
   };
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0a0f1e]">
       <div className="flex flex-col items-center gap-3">
-        <Loader2 className="w-10 h-10 animate-spin text-primary-500" />
+        <Loader2 className="w-10 h-10 animate-spin text-cyan-500" />
         <p className="text-gray-400 text-sm">Loading course...</p>
       </div>
     </div>
   );
 
   if (!course || course.error) return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0a0f1e]">
       <div className="text-center">
         <BookOpen className="w-16 h-16 mx-auto mb-4 text-gray-300" />
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Course not found</h2>
@@ -92,19 +92,10 @@ export default function CourseStudyPage() {
   const progress = lessons.length > 0 ? Math.round((completedLessons.length / lessons.length) * 100) : 0;
   const currentLesson = lessons[activeLesson];
 
-  const categoryGradients: Record<string, string> = {
-    Technology: "from-blue-600 to-cyan-500",
-    Science: "from-green-600 to-emerald-500",
-    Business: "from-orange-600 to-amber-500",
-    Arts: "from-pink-600 to-rose-500",
-    Commerce: "from-purple-600 to-violet-500",
-    Health: "from-red-600 to-pink-500",
-    default: "from-primary-600 to-primary-500",
-  };
-  const grad = categoryGradients[course.category] || categoryGradients.default;
+  const grad = "from-cyan-600 to-indigo-600";
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e] flex flex-col">
       <Navbar />
 
       {/* Course Header */}
@@ -126,7 +117,7 @@ export default function CourseStudyPage() {
               </div>
             </div>
             {!enrolled ? (
-              <button onClick={handleEnroll} disabled={enrolling} className="flex-shrink-0 bg-white text-primary-700 font-bold px-6 py-3 rounded-xl hover:bg-primary-50 transition-all shadow-lg flex items-center gap-2 text-sm">
+              <button onClick={handleEnroll} disabled={enrolling} className="flex-shrink-0 bg-white text-cyan-700 font-bold px-6 py-3 rounded-xl hover:bg-cyan-50 transition-all shadow-lg flex items-center gap-2 text-sm">
                 {enrolling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
                 {enrolling ? "Enrolling..." : "Enroll Free"}
               </button>
@@ -156,12 +147,12 @@ export default function CourseStudyPage() {
         <div className="flex gap-6 relative">
 
           {/* Sidebar */}
-          <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-white dark:bg-gray-900 shadow-xl transition-transform lg:relative lg:inset-auto lg:shadow-none lg:z-auto lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
-            <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800 lg:hidden">
+          <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-white dark:bg-[#0f172a] shadow-xl transition-transform lg:relative lg:inset-auto lg:shadow-none lg:z-auto lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+            <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-[#1e293b] lg:hidden">
               <span className="font-semibold text-gray-900 dark:text-white">Lessons</span>
               <button onClick={() => setSidebarOpen(false)}><X className="w-5 h-5" /></button>
             </div>
-            <div className="p-4 border-b border-gray-100 dark:border-gray-800 hidden lg:block">
+            <div className="p-4 border-b border-gray-100 dark:border-[#1e293b] hidden lg:block">
               <h3 className="font-bold text-gray-900 dark:text-white mb-1">Course Content</h3>
               <p className="text-xs text-gray-400">{lessons.length} lessons · {course.duration}</p>
               {enrolled && <ProgressBar value={progress} className="mt-2" color="blue" />}
@@ -176,13 +167,13 @@ export default function CourseStudyPage() {
                     key={i}
                     onClick={() => { if (!isLocked) { setActiveLesson(i); setSidebarOpen(false); } }}
                     disabled={isLocked}
-                    className={`w-full text-left px-4 py-3.5 border-b border-gray-50 dark:border-gray-800 flex items-start gap-3 transition-all ${isActive ? "bg-primary-50 dark:bg-primary-900/20 border-l-4 border-l-primary-500" : isLocked ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-50 dark:hover:bg-gray-800/50"}`}
+                    className={`w-full text-left px-4 py-3.5 border-b border-gray-50 dark:border-[#1e293b] flex items-start gap-3 transition-all ${isActive ? "bg-cyan-50 dark:bg-cyan-900/20 border-l-4 border-l-cyan-500" : isLocked ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-50 dark:hover:bg-[#1e293b]/50"}`}
                   >
-                    <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold ${isCompleted ? "bg-green-100 dark:bg-green-900/30 text-green-600" : isActive ? "bg-primary-100 dark:bg-primary-900/30 text-primary-600" : "bg-gray-100 dark:bg-gray-800 text-gray-500"}`}>
+                    <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold ${isCompleted ? "bg-green-100 dark:bg-green-900/30 text-green-600" : isActive ? "bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600" : "bg-gray-100 dark:bg-gray-800 text-gray-500"}`}>
                       {isCompleted ? <CheckCircle className="w-4 h-4" /> : isLocked ? <Lock className="w-3 h-3" /> : i + 1}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-medium leading-tight ${isActive ? "text-primary-700 dark:text-primary-400" : "text-gray-700 dark:text-gray-300"}`}>{lesson.title}</p>
+                      <p className={`text-sm font-medium leading-tight ${isActive ? "text-cyan-700 dark:text-cyan-400" : "text-gray-700 dark:text-gray-300"}`}>{lesson.title}</p>
                       <p className="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><Clock className="w-3 h-3" />{lesson.duration}</p>
                     </div>
                   </button>
@@ -213,9 +204,9 @@ export default function CourseStudyPage() {
             )}
 
             {currentLesson ? (
-              <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
+              <div className="bg-white dark:bg-[#0f172a] rounded-2xl shadow-sm border border-gray-100 dark:border-[#1e293b] overflow-hidden">
                 {/* Lesson Header */}
-                <div className="p-6 border-b border-gray-100 dark:border-gray-800">
+                <div className="p-6 border-b border-gray-100 dark:border-[#1e293b]">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">Lesson {activeLesson + 1} of {lessons.length}</span>
                     {completedLessons.includes(activeLesson) && (
@@ -250,7 +241,7 @@ export default function CourseStudyPage() {
                           <ul key={i} className="space-y-2 my-3">
                             {items.map((item, j) => (
                               <li key={j} className="flex items-start gap-2 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary-500 mt-2 flex-shrink-0" />
+                                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 mt-2 flex-shrink-0" />
                                 {item.replace("- ", "")}
                               </li>
                             ))}
@@ -259,7 +250,7 @@ export default function CourseStudyPage() {
                       }
                       if (block.startsWith("💡") || block.startsWith("⚠️") || block.startsWith("✅") || block.startsWith("📌")) {
                         return (
-                          <div key={i} className="bg-primary-50 dark:bg-primary-900/20 border border-primary-100 dark:border-primary-800 rounded-xl p-4 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                          <div key={i} className="bg-cyan-50 dark:bg-cyan-900/20 border border-cyan-100 dark:border-cyan-800 rounded-xl p-4 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                             {block}
                           </div>
                         );
@@ -284,7 +275,7 @@ export default function CourseStudyPage() {
                           href={v.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors group border border-gray-100 dark:border-gray-700"
+                          className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-[#1e293b] rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors group border border-gray-100 dark:border-[#1e293b]"
                         >
                           <span className="text-3xl flex-shrink-0">{v.thumbnail}</span>
                           <div className="flex-1 min-w-0">
@@ -300,7 +291,7 @@ export default function CourseStudyPage() {
                 )}
 
                 {/* Lesson Footer */}
-                <div className="p-6 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between gap-3 flex-wrap">
+                <div className="p-6 border-t border-gray-100 dark:border-[#1e293b] flex items-center justify-between gap-3 flex-wrap">
                   <button
                     onClick={() => setActiveLesson(Math.max(0, activeLesson - 1))}
                     disabled={activeLesson === 0}
@@ -324,14 +315,14 @@ export default function CourseStudyPage() {
                       </button>
                     ) : progress === 100 ? (
                       <Link href="/learn" className="btn-primary flex items-center gap-2 text-sm py-2.5 px-5 bg-green-600 hover:bg-green-700">
-                        <CheckCircle className="w-4 h-4" /> Course Complete! 🎉
+                        <CheckCircle className="w-4 h-4" /> Course Complete
                       </Link>
                     ) : null}
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="bg-white dark:bg-gray-900 rounded-2xl p-12 text-center border border-gray-100 dark:border-gray-800">
+              <div className="bg-white dark:bg-[#0f172a] rounded-2xl p-12 text-center border border-gray-100 dark:border-[#1e293b]">
                 <BookOpen className="w-16 h-16 mx-auto mb-4 text-gray-200 dark:text-gray-700" />
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">No lessons available yet</h3>
                 <p className="text-gray-400 text-sm">Check back soon — content is being added.</p>

@@ -164,11 +164,11 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-purple-50 dark:from-gray-950 dark:to-gray-900 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#050810] bg-grid p-4">
       <div className="w-full max-w-lg">
         {/* Header */}
         <div className="text-center mb-6">
-          <Link href="/" className="inline-flex items-center gap-2 text-primary-600 font-bold text-2xl">
+          <Link href="/" className="inline-flex items-center gap-2 text-cyan-500 font-bold text-2xl">
             <GraduationCap className="w-8 h-8" /> CareerMitra
           </Link>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mt-3">Create your account</h1>
@@ -178,11 +178,11 @@ export default function SignupPage() {
           <div className="flex items-center justify-center gap-2 mt-4">
             {["Basic Info", "Education", "Interests"].map((label, i) => (
               <div key={label} className="flex items-center gap-2">
-                <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all ${i + 1 <= step ? "bg-primary-600 text-white" : "bg-gray-100 dark:bg-gray-800 text-gray-400"}`}>
+                <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all ${i + 1 <= step ? "bg-cyan-500 text-white" : "bg-gray-100 dark:bg-gray-800 text-gray-400"}`}>
                   {i + 1 < step ? <CheckCircle2 className="w-3 h-3" /> : <span>{i + 1}</span>}
                   <span className="hidden sm:inline">{label}</span>
                 </div>
-                {i < 2 && <div className={`w-6 h-0.5 rounded ${i + 1 < step ? "bg-primary-600" : "bg-gray-200 dark:bg-gray-700"}`} />}
+                {i < 2 && <div className={`w-6 h-0.5 rounded ${i + 1 < step ? "bg-cyan-500" : "bg-gray-200 dark:bg-gray-700"}`} />}
               </div>
             ))}
           </div>
@@ -240,7 +240,7 @@ export default function SignupPage() {
               </div>
 
               {form.educationLevel && (
-                <div className="flex items-center gap-2 px-3 py-2 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-xl text-sm text-primary-700 dark:text-primary-400">
+                <div className="flex items-center gap-2 px-3 py-2 bg-cyan-50 dark:bg-cyan-900/20 border border-cyan-200 dark:border-cyan-800 rounded-xl text-sm text-cyan-700 dark:text-cyan-400">
                   <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
                   <span>Selected: <strong>{form.educationLevel}</strong></span>
                 </div>
@@ -271,18 +271,18 @@ export default function SignupPage() {
                             onClick={() => setForm({ ...form, educationLevel: opt.value })}
                             className={`w-full flex items-center justify-between px-4 py-3 text-left transition-all ${
                               form.educationLevel === opt.value
-                                ? "bg-primary-50 dark:bg-primary-900/20"
-                                : "bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800/30"
+                                ? "bg-cyan-50 dark:bg-cyan-900/20"
+                                : "bg-white dark:bg-[#0f172a] hover:bg-gray-50 dark:hover:bg-gray-800/30"
                             }`}
                           >
                             <div>
-                              <div className={`text-sm font-medium ${form.educationLevel === opt.value ? "text-primary-700 dark:text-primary-400" : "text-gray-800 dark:text-gray-200"}`}>
+                              <div className={`text-sm font-medium ${form.educationLevel === opt.value ? "text-cyan-700 dark:text-cyan-400" : "text-gray-800 dark:text-gray-200"}`}>
                                 {opt.label}
                               </div>
                               <div className="text-xs text-gray-400 mt-0.5">{opt.desc}</div>
                             </div>
                             {form.educationLevel === opt.value && (
-                              <CheckCircle2 className="w-5 h-5 text-primary-600 flex-shrink-0" />
+                              <CheckCircle2 className="w-5 h-5 text-cyan-500 flex-shrink-0" />
                             )}
                           </button>
                         ))}
@@ -319,8 +319,8 @@ export default function SignupPage() {
                     onClick={() => toggleInterest(label)}
                     className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm border transition-all text-left ${
                       form.interests.includes(label)
-                        ? "border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 font-medium"
-                        : "border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-primary-300"
+                        ? "border-cyan-500 bg-cyan-50 dark:bg-cyan-900/20 text-cyan-700 dark:text-cyan-400 font-medium"
+                        : "border-gray-200 dark:border-[#1e293b] text-gray-700 dark:text-gray-300 hover:border-cyan-300"
                     }`}
                   >
                     <span className="text-base">{icon}</span>
@@ -361,7 +361,7 @@ export default function SignupPage() {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Already have an account?{" "}
-          <Link href="/auth/login" className="text-primary-600 font-medium hover:underline">Sign in</Link>
+          <Link href="/auth/login" className="text-cyan-500 font-medium hover:underline">Sign in</Link>
         </p>
       </div>
     </div>

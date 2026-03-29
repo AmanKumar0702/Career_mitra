@@ -8,24 +8,31 @@ import { Badge } from "@/components/ui/Badge";
 import { Modal } from "@/components/ui/Modal";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import {
-  ClipboardList, Clock, XCircle, AlertTriangle, Loader2,
-  Timer, Trophy, Target, Zap, Maximize, AlertOctagon,
+  ClipboardList, XCircle, AlertTriangle, Loader2,
+  Timer, Trophy, Target, Zap, Maximize, AlertOctagon, Globe, RefreshCw,
+  Code, Brain, FlaskConical, BarChart2, BookOpen, Dna, FileText, Landmark,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
 type QuizState = "idle" | "taking" | "result";
 
-const categoryColors: Record<string, string> = {
-  Technology: "from-blue-500 to-cyan-400",
-  Aptitude: "from-purple-500 to-violet-400",
-  Science: "from-green-500 to-emerald-400",
-  Commerce: "from-orange-500 to-amber-400",
-  Language: "from-pink-500 to-rose-400",
-  default: "from-primary-500 to-primary-400",
+const categoryConfig: Record<string, { icon: any; gradient: string }> = {
+  Technology:  { icon: Code,         gradient: "from-blue-600 to-cyan-500"    },
+  Aptitude:    { icon: Brain,        gradient: "from-purple-600 to-violet-500" },
+  Science:     { icon: FlaskConical, gradient: "from-green-600 to-emerald-500" },
+  Commerce:    { icon: BarChart2,    gradient: "from-orange-600 to-amber-500"  },
+  Language:    { icon: BookOpen,     gradient: "from-pink-600 to-rose-500"     },
+  JEE:         { icon: Zap,          gradient: "from-blue-700 to-indigo-600"   },
+  NEET:        { icon: Dna,          gradient: "from-green-700 to-teal-600"    },
+  SSC:         { icon: FileText,     gradient: "from-orange-700 to-amber-600"  },
+  UPSC:        { icon: Landmark,     gradient: "from-red-700 to-rose-600"      },
+  default:     { icon: ClipboardList,gradient: "from-purple-600 to-indigo-500" },
 };
-const categoryIcons: Record<string, string> = {
-  Technology: "💻", Aptitude: "🧠", Science: "🔬", Commerce: "📊", Language: "📝", default: "📋",
-};
+
+const getCategoryConfig = (cat: string) => categoryConfig[cat] || categoryConfig.default;
+
+const LIVE_CATEGORIES = ["General Knowledge", "Science", "Mathematics", "Technology", "History", "Geography", "Sports", "Music"];
+const DIFFICULTIES = ["easy", "medium", "hard"];
 
 export default function TestsPage() {
   const { data: session } = useSession();
@@ -38,13 +45,15 @@ export default function TestsPage() {
   const [result, setResult] = useState<any>(null);
   const [submitting, setSubmitting] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
-  const [fsWarning, setFsWarning] = useState(false);
+  const [liveLoading, setLiveLoading] = useState(false);
+  const [liveCategory, setLiveCategory] = useState("General Knowledge");
+  const [liveDifficulty, setLiveDifficulty] = useState("medium");
+
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const answersRef = useRef<Record<number, number>>({});
   const activeTestRef = useRef<any>(null);
   const quizStateRef = useRef<QuizState>("idle");
 
-  // keep refs in sync
   useEffect(() => { answersRef.current = answers; }, [answers]);
   useEffect(() => { activeTestRef.current = activeTest; }, [activeTest]);
   useEffect(() => { quizStateRef.current = quizState; }, [quizState]);
@@ -56,37 +65,39 @@ export default function TestsPage() {
       .catch(() => { toast.error("Failed to load tests"); setLoading(false); });
   }, []);
 
-  // ── Fullscreen helpers ──────────────────────────────────────────────────────
   const enterFullscreen = () => {
-    const el = document.documentElement;
-    if (el.requestFullscreen) el.requestFullscreen();
+    try {
+      const el = document.documentElement;
+      if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+    } catch {}
   };
 
   const exitFullscreen = () => {
     if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
   };
 
-  // ── Auto-submit (stable, uses refs) ────────────────────────────────────────
   const autoSubmit = useCallback(async (reason: "timeout" | "fullscreen") => {
     if (quizStateRef.current !== "taking") return;
     if (timerRef.current) clearTimeout(timerRef.current);
     exitFullscreen();
-
     if (reason === "fullscreen") {
       toast.error("You exited fullscreen — test auto-submitted!", { duration: 4000 });
     } else {
       toast.error("Time's up! Auto-submitting...");
     }
-
     const test = activeTestRef.current;
     const currentAnswers = answersRef.current;
     if (!test) return;
-
     try {
+      const body: any = { testId: test._id, answers: currentAnswers };
+      if (test.isLive) {
+        body.questions = test.questions;
+        body.passingScore = test.passingScore;
+      }
       const res = await fetch("/api/tests/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ testId: test._id, answers: currentAnswers }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
@@ -98,22 +109,15 @@ export default function TestsPage() {
     }
   }, []);
 
-  // ── Fullscreen + Tab switch detection ────────────────────────────────────
   useEffect(() => {
     const handleFsChange = () => {
-      if (!document.fullscreenElement && quizStateRef.current === "taking") {
-        autoSubmit("fullscreen");
-      }
+      if (!document.fullscreenElement && quizStateRef.current === "taking") autoSubmit("fullscreen");
     };
     const handleVisibility = () => {
-      if (document.hidden && quizStateRef.current === "taking") {
-        autoSubmit("fullscreen");
-      }
+      if (document.hidden && quizStateRef.current === "taking") autoSubmit("fullscreen");
     };
     const handleBlur = () => {
-      if (quizStateRef.current === "taking") {
-        autoSubmit("fullscreen");
-      }
+      if (quizStateRef.current === "taking") autoSubmit("fullscreen");
     };
     document.addEventListener("fullscreenchange", handleFsChange);
     document.addEventListener("visibilitychange", handleVisibility);
@@ -125,7 +129,6 @@ export default function TestsPage() {
     };
   }, [autoSubmit]);
 
-  // ── Timer ───────────────────────────────────────────────────────────────────
   useEffect(() => {
     if (quizState === "taking" && timeLeft > 0) {
       timerRef.current = setTimeout(() => setTimeLeft((t) => t - 1), 1000);
@@ -143,12 +146,30 @@ export default function TestsPage() {
       setAnswers({});
       setCurrent(0);
       setTimeLeft((fullTest.duration || 20) * 60);
-      setFsWarning(false);
       setQuizState("taking");
-      // enter fullscreen after state update
-      setTimeout(enterFullscreen, 100);
+      enterFullscreen();
     } catch {
       toast.error("Failed to load test. Please try again.");
+    }
+  };
+
+  const startLiveQuiz = async () => {
+    setLiveLoading(true);
+    try {
+      const url = `/api/tests/live?category=${encodeURIComponent(liveCategory)}&difficulty=${liveDifficulty}&amount=10`;
+      const res = await fetch(url);
+      const liveTest = await res.json();
+      if (!res.ok) throw new Error(liveTest.error);
+      setActiveTest(liveTest);
+      setAnswers({});
+      setCurrent(0);
+      setTimeLeft((liveTest.duration || 15) * 60);
+      setQuizState("taking");
+      enterFullscreen();
+    } catch {
+      toast.error("Failed to load live quiz. Try again.");
+    } finally {
+      setLiveLoading(false);
     }
   };
 
@@ -158,10 +179,16 @@ export default function TestsPage() {
     exitFullscreen();
     setSubmitting(true);
     try {
+      const body: any = { testId: activeTest._id, answers };
+      // For live quizzes, send questions so server can score without DB lookup
+      if (activeTest.isLive) {
+        body.questions = activeTest.questions;
+        body.passingScore = activeTest.passingScore;
+      }
       const res = await fetch("/api/tests/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ testId: activeTest._id, answers }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
@@ -183,43 +210,108 @@ export default function TestsPage() {
   const timerBg = timeLeft < 60 ? "bg-red-50 dark:bg-red-900/20" : timeLeft < 180 ? "bg-yellow-50 dark:bg-yellow-900/20" : "bg-gray-100 dark:bg-gray-800";
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e]">
       <Navbar />
 
       {/* Hero */}
-      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-12">
+      <div className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-extrabold mb-2">Test & Assessment 🧠</h1>
+          <span className="inline-block text-xs font-semibold uppercase tracking-widest text-purple-200 mb-3">Test & Assessment</span>
+          <h1 className="text-4xl font-extrabold mb-2">Test & Assessment</h1>
           <p className="text-purple-100 text-lg mb-4">MCQ quizzes with timer, scoring & weak area detection</p>
           <div className="flex flex-wrap gap-6 text-sm text-purple-100">
-            <span className="flex items-center gap-1.5"><ClipboardList className="w-4 h-4" /> {tests.length} Tests Available</span>
+            <span className="flex items-center gap-1.5"><ClipboardList className="w-4 h-4" /> {tests.length} Practice Tests</span>
+            <span className="flex items-center gap-1.5"><Globe className="w-4 h-4" /> Live Quiz from OpenTDB</span>
             <span className="flex items-center gap-1.5"><Timer className="w-4 h-4" /> Timed Quizzes</span>
             <span className="flex items-center gap-1.5"><Target className="w-4 h-4" /> Weak Area Analysis</span>
-            <span className="flex items-center gap-1.5"><Zap className="w-4 h-4" /> Earn XP on Completion</span>
-            <span className="flex items-center gap-1.5"><Maximize className="w-4 h-4" /> Fullscreen Mode</span>
+            <span className="flex items-center gap-1.5"><Zap className="w-4 h-4" /> Earn XP</span>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        {/* Live Quiz Section */}
+        <div className="mb-10 rounded-2xl border border-purple-100 dark:border-purple-900/30 overflow-hidden"
+          style={{ background: "linear-gradient(135deg, rgba(147,51,234,0.05), rgba(99,102,241,0.05))" }}>
+          <div className="p-6">
+            <div className="flex items-center gap-2 mb-1">
+              <Globe className="w-5 h-5 text-purple-500" />
+              <h2 className="font-bold text-gray-900 dark:text-white text-lg">Live Quiz</h2>
+              <span className="flex items-center gap-1 text-xs bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-2 py-0.5 rounded-full font-medium">
+                <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" /> Live
+              </span>
+            </div>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mb-5">Fresh questions every time — powered by Open Trivia Database. No two quizzes are the same!</p>
+            <div className="flex flex-wrap gap-3 items-end">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 dark:text-slate-400 mb-1.5 uppercase tracking-wide">Category</label>
+                <select
+                  value={liveCategory}
+                  onChange={(e) => setLiveCategory(e.target.value)}
+                  className="input py-2 text-sm"
+                  style={{ minWidth: 180 }}
+                >
+                  {LIVE_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 dark:text-slate-400 mb-1.5 uppercase tracking-wide">Difficulty</label>
+                <select
+                  value={liveDifficulty}
+                  onChange={(e) => setLiveDifficulty(e.target.value)}
+                  className="input py-2 text-sm"
+                  style={{ minWidth: 120 }}
+                >
+                  {DIFFICULTIES.map((d) => <option key={d} value={d}>{d.charAt(0).toUpperCase() + d.slice(1)}</option>)}
+                </select>
+              </div>
+              <button
+                onClick={startLiveQuiz}
+                disabled={liveLoading}
+                className="btn-primary flex items-center gap-2 py-2.5"
+              >
+                {liveLoading
+                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Loading...</>
+                  : <><RefreshCw className="w-4 h-4" /> Start Live Quiz</>
+                }
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Practice Tests */}
+        <h2 className="font-bold text-gray-900 dark:text-white mb-5 flex items-center gap-2 text-lg">
+          <ClipboardList className="w-5 h-5 text-purple-500" /> Practice Tests
+        </h2>
+
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
-            <Loader2 className="w-10 h-10 animate-spin text-primary-500" />
+            <Loader2 className="w-10 h-10 animate-spin text-purple-500" />
             <p className="text-gray-400 text-sm">Loading tests...</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {tests.map((test) => {
-              const grad = categoryColors[test.category] || categoryColors.default;
-              const icon = categoryIcons[test.category] || categoryIcons.default;
+              const cfg = getCategoryConfig(test.category);
+              const Icon = cfg.icon;
               return (
                 <Card key={test._id} className="flex flex-col p-0 overflow-hidden hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-                  <div className={`h-28 bg-gradient-to-br ${grad} flex items-center justify-between px-6`}>
-                    <span className="text-5xl">{icon}</span>
-                    <div className="text-right text-white">
+                  {/* Banner with Lucide icon */}
+                  <div className={`relative h-28 bg-gradient-to-br ${cfg.gradient} flex items-center justify-between px-6 overflow-hidden`}>
+                    {/* Dot pattern */}
+                    <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "18px 18px" }} />
+                    {/* Icon */}
+                    <div className="relative z-10 w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                      <Icon className="w-7 h-7 text-white" />
+                    </div>
+                    {/* Question count */}
+                    <div className="relative z-10 text-right text-white">
                       <div className="text-3xl font-extrabold">{test.questions?.length || 0}</div>
                       <div className="text-xs opacity-80">Questions</div>
                     </div>
+                    {/* Shine */}
+                    <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)" }} />
                   </div>
                   <div className="p-5 flex flex-col flex-1">
                     <div className="flex items-center gap-2 mb-2">
@@ -241,7 +333,6 @@ export default function TestsPage() {
                         <div className="text-xs text-gray-400">Pass Mark</div>
                       </div>
                     </div>
-                    {/* Fullscreen warning */}
                     <p className="text-xs text-amber-600 dark:text-amber-400 flex items-center gap-1 mb-3">
                       <AlertOctagon className="w-3.5 h-3.5 flex-shrink-0" />
                       Exiting fullscreen will auto-submit the test
@@ -257,25 +348,17 @@ export default function TestsPage() {
         )}
       </div>
 
-      {/* ── Quiz Modal ─────────────────────────────────────────────────────── */}
-      <Modal
-        open={quizState === "taking"}
-        onClose={() => {
-          // prevent accidental close — user must submit
-        }}
-        className="max-w-2xl"
-      >
+      {/* Quiz Modal */}
+      <Modal open={quizState === "taking"} onClose={() => {}} className="max-w-2xl">
         {activeTest && q && (
           <div>
-            {/* Fullscreen warning banner */}
             <div className="flex items-center gap-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl px-3 py-2 mb-4 text-xs text-amber-700 dark:text-amber-400">
               <AlertOctagon className="w-4 h-4 flex-shrink-0" />
-              <span>Stay in fullscreen. Exiting fullscreen or <strong>switching tabs</strong> will <strong>auto-submit</strong> your test immediately.</span>
+              <span>Stay in fullscreen. Exiting or <strong>switching tabs</strong> will <strong>auto-submit</strong> immediately.</span>
             </div>
 
-            {/* Header */}
             <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 truncate max-w-[180px]">{activeTest.title}</span>
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 truncate max-w-[200px]">{activeTest.title}</span>
               <div className="flex items-center gap-3">
                 <span className={`flex items-center gap-1.5 text-sm font-mono font-bold px-3 py-1 rounded-lg ${timerBg} ${timerColor}`}>
                   <Timer className="w-4 h-4" />{formatTime(timeLeft)}
@@ -300,8 +383,8 @@ export default function TestsPage() {
                   onClick={() => setAnswers({ ...answers, [current]: j })}
                   className={`w-full text-left px-4 py-3.5 rounded-xl border-2 transition-all text-sm ${
                     answers[current] === j
-                      ? "border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 font-medium"
-                      : "border-gray-200 dark:border-gray-700 hover:border-primary-300 text-gray-700 dark:text-gray-300"
+                      ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 font-medium"
+                      : "border-gray-200 dark:border-gray-700 hover:border-purple-300 text-gray-700 dark:text-gray-300"
                   }`}
                 >
                   <span className="inline-flex w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-800 items-center justify-center text-xs font-bold mr-3">
@@ -314,7 +397,7 @@ export default function TestsPage() {
 
             <div className="flex gap-3">
               {current > 0 && (
-                <button className="btn-secondary flex-1 py-2.5" onClick={() => setCurrent(current - 1)}>← Previous</button>
+                <button className="btn-secondary flex-1 py-2.5" onClick={() => setCurrent(current - 1)}>Previous</button>
               )}
               {current < activeTest.questions.length - 1 ? (
                 <button
@@ -322,7 +405,7 @@ export default function TestsPage() {
                   onClick={() => setCurrent(current + 1)}
                   disabled={answers[current] === undefined}
                 >
-                  Next →
+                  Next
                 </button>
               ) : (
                 <button
@@ -330,12 +413,11 @@ export default function TestsPage() {
                   onClick={submitTest}
                   disabled={submitting}
                 >
-                  {submitting ? <><Loader2 className="w-4 h-4 animate-spin" /> Submitting...</> : "Submit Test ✓"}
+                  {submitting ? <><Loader2 className="w-4 h-4 animate-spin" /> Submitting...</> : "Submit Test"}
                 </button>
               )}
             </div>
 
-            {/* Question dots */}
             <div className="flex flex-wrap gap-1.5 mt-4 justify-center">
               {activeTest.questions.map((_: any, i: number) => (
                 <button
@@ -343,7 +425,7 @@ export default function TestsPage() {
                   onClick={() => setCurrent(i)}
                   className={`w-7 h-7 rounded-full text-xs font-medium transition-all ${
                     i === current
-                      ? "bg-primary-600 text-white"
+                      ? "bg-purple-600 text-white"
                       : answers[i] !== undefined
                         ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
                         : "bg-gray-100 dark:bg-gray-800 text-gray-500"
@@ -357,8 +439,8 @@ export default function TestsPage() {
         )}
       </Modal>
 
-      {/* ── Result Modal ───────────────────────────────────────────────────── */}
-      <Modal open={quizState === "result"} onClose={() => setQuizState("idle")} title="Test Results 🎯">
+      {/* Result Modal */}
+      <Modal open={quizState === "result"} onClose={() => setQuizState("idle")} title="Test Results">
         {result && (
           <div className="text-center">
             <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4 ${result.passed ? "bg-green-100 dark:bg-green-900/20" : "bg-red-100 dark:bg-red-900/20"}`}>
@@ -370,12 +452,12 @@ export default function TestsPage() {
             <div className="text-6xl font-extrabold text-gray-900 dark:text-white mb-1">{result.score}%</div>
             <p className="text-gray-500 mb-1 text-lg">{result.correct} / {result.total} correct</p>
             {session && (
-              <p className="text-sm text-primary-600 font-semibold mb-3 flex items-center justify-center gap-1">
+              <p className="text-sm text-purple-600 dark:text-purple-400 font-semibold mb-3 flex items-center justify-center gap-1">
                 <Zap className="w-4 h-4" /> +{Math.round(result.score / 10)} XP earned!
               </p>
             )}
             <Badge variant={result.passed ? "success" : "danger"} className="mb-6 text-sm px-4 py-1">
-              {result.passed ? "✓ Passed!" : "✗ Failed — Try Again"}
+              {result.passed ? "Passed!" : "Failed — Try Again"}
             </Badge>
 
             {result.weakAreas?.length > 0 && (
