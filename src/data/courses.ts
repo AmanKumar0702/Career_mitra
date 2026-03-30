@@ -418,7 +418,7 @@ Gives a command or request.
   {
     title: "EVS - Our Environment (Class 3-5)",
     description: "Learn about plants, animals, water, air and our surroundings in a fun way.",
-    category: "Science", educationGroup: "class1to5", language: "Hindi", level: "beginner",
+    category: "Science", educationGroup: "class1to5", language: "English", level: "beginner",
     duration: "3 hours", instructor: "Mrs. Kavita Rao",
     tags: ["evs", "environment", "class3", "class5", "science"], enrolledCount: 8200, rating: 4.6, reviewCount: 810,
     youtubeVideos: [
@@ -1757,7 +1757,7 @@ Cylinder:       SA = 2 x pi x r x (r + h)
 sampleCourses.push({
   title: "Class 10 Science (CBSE)",
   description: "Physics, Chemistry, Biology — complete NCERT with board exam tips and PYQs.",
-  category: "Science", educationGroup: "class9to10", language: "Hindi", level: "intermediate",
+  category: "Science", educationGroup: "class9to10", language: "English", level: "intermediate",
   duration: "18 hours", instructor: "Dr. Prashant Tiwari",
   tags: ["science", "class10", "cbse", "physics", "chemistry", "biology"], enrolledCount: 45000, rating: 4.9, reviewCount: 4800, featured: true,
   youtubeVideos: [
@@ -2096,7 +2096,7 @@ Nephron is the functional unit of the kidney.
 sampleCourses.push({
   title: "Class 10 Mathematics (CBSE)",
   description: "Complete Class 10 Maths — Real Numbers, Polynomials, Quadratics, Trigonometry, Statistics.",
-  category: "Mathematics", educationGroup: "class9to10", language: "Hindi", level: "intermediate",
+  category: "Mathematics", educationGroup: "class9to10", language: "English", level: "intermediate",
   duration: "14 hours", instructor: "Mr. Amit Kumar",
   tags: ["maths", "class10", "cbse", "board", "algebra", "geometry"], enrolledCount: 28000, rating: 4.7, reviewCount: 2900, featured: true,
   youtubeVideos: [

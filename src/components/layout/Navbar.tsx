@@ -2,8 +2,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { BookOpen, Briefcase, BarChart2, FileText, Menu, X, GraduationCap, Sun, Moon, ClipboardList, Compass } from "lucide-react";
+import { BookOpen, Briefcase, BarChart2, FileText, Menu, X, GraduationCap, Sun, Moon, ClipboardList, Compass, LogOut, LogIn } from "lucide-react";
 import { useTheme } from "@/components/layout/ThemeProvider";
+import { useSession, signOut } from "next-auth/react";
 
 const navLinks = [
   { href: "/dashboard", label: "Dashboard", icon: BarChart2 },
@@ -18,6 +19,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { theme, toggle } = useTheme();
+  const { data: session, status } = useSession();
 
   return (
     <nav className="sticky top-0 z-50 relative bg-white dark:bg-[#0a0f1e] border-b border-gray-100 dark:border-[#1e293b] shadow-sm">
@@ -65,6 +67,26 @@ export default function Navbar() {
             >
               {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
+            {status !== "loading" && (
+              session ? (
+                <div className="hidden md:flex items-center gap-2">
+                  <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">{session.user?.name?.split(" ")[0]}</span>
+                  <button
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all"
+                  >
+                    <LogOut className="w-4 h-4" /> Logout
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/auth/login"
+                  className="hidden md:flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-cyan-500 text-white hover:bg-cyan-600 transition-all"
+                >
+                  <LogIn className="w-4 h-4" /> Login
+                </Link>
+              )
+            )}
             <button
               className="md:hidden p-2 rounded-lg text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-[#1e293b]"
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -96,6 +118,24 @@ export default function Navbar() {
               </Link>
             );
           })}
+          {status !== "loading" && (
+            session ? (
+              <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+              >
+                <LogOut className="w-4 h-4" /> Logout
+              </button>
+            ) : (
+              <Link
+                href="/auth/login"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium bg-cyan-500 text-white"
+              >
+                <LogIn className="w-4 h-4" /> Login
+              </Link>
+            )
+          )}
         </div>
       )}
     </nav>

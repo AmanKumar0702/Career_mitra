@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Sparkles, BookOpen, Target, Briefcase, Star, TrendingUp, Flame, Zap, Trophy, Award } from "lucide-react";
+import { ArrowRight, Sparkles, BookOpen, Target, Briefcase, Star, TrendingUp, Flame, Zap, Trophy } from "lucide-react";
 import { motion } from "framer-motion";
 
 const floatingCards = [
@@ -11,10 +11,31 @@ const floatingCards = [
   { icon: Briefcase, label: "1000+ Jobs",   color: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600" },
 ];
 
+const WORDS = ["Learn", "Grow", "Earn", "Succeed", "Explore"];
+
 export default function HeroSection() {
   const { data: session } = useSession();
   const [user, setUser] = useState<any>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const [wordIndex, setWordIndex] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const word = WORDS[wordIndex];
+    let timeout: ReturnType<typeof setTimeout>;
+    if (!deleting && displayed.length < word.length) {
+      timeout = setTimeout(() => setDisplayed(word.slice(0, displayed.length + 1)), 100);
+    } else if (!deleting && displayed.length === word.length) {
+      timeout = setTimeout(() => setDeleting(true), 1400);
+    } else if (deleting && displayed.length > 0) {
+      timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 60);
+    } else if (deleting && displayed.length === 0) {
+      setDeleting(false);
+      setWordIndex((i) => (i + 1) % WORDS.length);
+    }
+    return () => clearTimeout(timeout);
+  }, [displayed, deleting, wordIndex]);
 
   useEffect(() => {
     if (session) {
@@ -81,6 +102,17 @@ export default function HeroSection() {
             <span className="inline-flex items-center gap-2 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-400 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
               <Sparkles className="w-4 h-4" /> AI-Powered Career Platform for Students
             </span>
+
+            {/* Animated brand name */}
+            {!isLoggedIn && (
+              <div className="mb-4 flex items-center gap-1">
+                <span className="text-4xl sm:text-5xl font-black tracking-tight text-transparent bg-clip-text brand-shimmer">
+                  {displayed}
+                </span>
+                <span className="text-4xl sm:text-5xl font-black text-cyan-400 animate-pulse">|</span>
+                <span className="text-4xl sm:text-5xl font-black text-gray-300 dark:text-gray-600">2Earn</span>
+              </div>
+            )}
 
             <h1 className="text-5xl sm:text-6xl font-extrabold text-gray-900 dark:text-white leading-tight mb-6">
               {isLoggedIn ? (
