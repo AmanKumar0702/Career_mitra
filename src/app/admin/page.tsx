@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
@@ -8,69 +8,104 @@ import { Badge } from "@/components/ui/Badge";
 import { Modal } from "@/components/ui/Modal";
 import { Plus, Pencil, Trash2, BookOpen, ClipboardList, Briefcase, Users } from "lucide-react";
 import toast from "react-hot-toast";
-import { sampleCourses } from "@/data/courses";
-import { sampleJobs } from "@/data/jobs";
 
 type Tab = "courses" | "tests" | "jobs";
 
-const staticTests = [
-  { title: "Python Basics Quiz", category: "Technology", questions: 5, duration: 20 },
-  { title: "General Aptitude Test", category: "Aptitude", questions: 4, duration: 30 },
-  { title: "Class 10 Science MCQ", category: "Science", questions: 3, duration: 25 },
-];
-
 export default function AdminPage() {
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("courses");
-  const [courses, setCourses] = useState(sampleCourses);
-  const [jobs, setJobs] = useState(sampleJobs);
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [editItem, setEditItem] = useState<any>(null);
   const [form, setForm] = useState<any>({});
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/auth/login");
-  }, [status, router]);
+    else if (status === "authenticated" && session?.user?.role !== "admin") router.push("/dashboard");
+  }, [status, session, router]);
 
-  const stats = [
-    { icon: BookOpen, label: "Total Courses", value: courses.length, color: "text-blue-600 bg-blue-50 dark:bg-blue-900/20" },
-    { icon: ClipboardList, label: "Total Tests", value: staticTests.length, color: "text-purple-600 bg-purple-50 dark:bg-purple-900/20" },
-    { icon: Briefcase, label: "Job Listings", value: jobs.length, color: "text-orange-600 bg-orange-50 dark:bg-orange-900/20" },
-    { icon: Users, label: "Students", value: "50K+", color: "text-green-600 bg-green-50 dark:bg-green-900/20" },
-  ];
+  const fetchItems = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/${tab}`);
+      const data = await res.json();
+      setItems(Array.isArray(data) ? data : []);
+    } catch {
+      toast.error("Failed to load data");
+    } finally {
+      setLoading(false);
+    }
+  }, [tab]);
+
+  useEffect(() => {
+    if (status === "authenticated" && session?.user?.role === "admin") fetchItems();
+  }, [tab, status, session, fetchItems]);
 
   const openAdd = () => { setEditItem(null); setForm({}); setModalOpen(true); };
-  const openEdit = (item: any) => { setEditItem(item); setForm({ ...item, skills: Array.isArray(item.skills) ? item.skills.join(", ") : item.skills }); setModalOpen(true); };
+  const openEdit = (item: any) => {
+    setEditItem(item);
+    setForm({ ...item, skills: Array.isArray(item.skills) ? item.skills.join(", ") : item.skills ?? "" });
+    setModalOpen(true);
+  };
 
-  const handleSave = () => {
-    if (tab === "courses") {
-      if (editItem) {
-        setCourses((c) => c.map((x) => (x.title === editItem.title ? { ...x, ...form } : x)));
-      } else {
-        setCourses((c) => [...c, { ...form, enrolledCount: 0, rating: 4.5, lessons: [] }]);
+  const handleSave = async () => {
+    try {
+      const payload = { ...form };
+      if (tab === "jobs" && typeof payload.skills === "string") {
+        payload.skills = payload.skills.split(",").map((s: string) => s.trim()).filter(Boolean);
       }
-    } else if (tab === "jobs") {
-      const skillsArr = typeof form.skills === "string"
-        ? form.skills.split(",").map((s: string) => s.trim()).filter(Boolean)
-        : form.skills || [];
+
+      let res;
       if (editItem) {
-        setJobs((j) => j.map((x) => (x.title === editItem.title ? { ...x, ...form, skills: skillsArr } : x)));
+        res = await fetch(`/api/${tab}/${editItem._id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
       } else {
-        setJobs((j) => [...j, { ...form, skills: skillsArr, isNew: true }]);
+        res = await fetch(`/api/${tab}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
       }
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        toast.error(err.error || `Failed (${res.status})`);
+        return;
+      }
+
+      toast.success(editItem ? "Updated successfully!" : "Added successfully!");
+      setModalOpen(false);
+      fetchItems();
+    } catch (e) {
+      console.error(e);
+      toast.error("Network error");
     }
-    setModalOpen(false);
-    toast.success(editItem ? "Updated successfully!" : "Added successfully!");
   };
 
-  const handleDelete = (title: string) => {
-    if (tab === "courses") setCourses((c) => c.filter((x) => x.title !== title));
-    else if (tab === "jobs") setJobs((j) => j.filter((x) => x.title !== title));
-    toast.success("Deleted successfully!");
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure?")) return;
+    try {
+      await fetch(`/api/${tab}/${id}`, { method: "DELETE" });
+      toast.success("Deleted successfully!");
+      fetchItems();
+    } catch {
+      toast.error("Failed to delete");
+    }
   };
 
-  if (status === "loading") return null;
+  if (status === "loading" || session?.user?.role !== "admin") return null;
+
+  const stats = [
+    { icon: BookOpen, label: "Total Courses", color: "text-blue-600 bg-blue-50 dark:bg-blue-900/20" },
+    { icon: ClipboardList, label: "Total Tests", color: "text-purple-600 bg-purple-50 dark:bg-purple-900/20" },
+    { icon: Briefcase, label: "Job Listings", color: "text-orange-600 bg-orange-50 dark:bg-orange-900/20" },
+    { icon: Users, label: "Students", color: "text-green-600 bg-green-50 dark:bg-green-900/20" },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -84,13 +119,13 @@ export default function AdminPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {stats.map(({ icon: Icon, label, value, color }) => (
+          {stats.map(({ icon: Icon, label, color }) => (
             <Card key={label} className="flex items-center gap-4">
               <div className={`p-3 rounded-xl ${color}`}>
                 <Icon className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">{value}</div>
+                <div className="text-2xl font-bold text-gray-900 dark:text-white">—</div>
                 <div className="text-xs text-gray-500">{label}</div>
               </div>
             </Card>
@@ -119,94 +154,83 @@ export default function AdminPage() {
 
         {/* Table */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-                <tr>
-                  {tab === "courses" && ["Title", "Category", "Level", "Enrolled", "Actions"].map((h) => (
-                    <th key={h} className="text-left px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{h}</th>
-                  ))}
-                  {tab === "jobs" && ["Title", "Company", "Type", "Location", "Actions"].map((h) => (
-                    <th key={h} className="text-left px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{h}</th>
-                  ))}
-                  {tab === "tests" && ["Title", "Category", "Questions", "Duration", "Actions"].map((h) => (
-                    <th key={h} className="text-left px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-                {tab === "courses" && courses.map((c, i) => (
-                  <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                    <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">{c.title}</td>
-                    <td className="px-6 py-4 text-gray-500">{c.category}</td>
-                    <td className="px-6 py-4">
-                      <Badge variant={c.level === "beginner" ? "success" : c.level === "intermediate" ? "warning" : "danger"}>
-                        {c.level}
-                      </Badge>
-                    </td>
-                    <td className="px-6 py-4 text-gray-500">{c.enrolledCount.toLocaleString()}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        <button onClick={() => openEdit(c)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500">
-                          <Pencil className="w-4 h-4" />
-                        </button>
-                        <button onClick={() => handleDelete(c.title)} className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-400">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
+          {loading ? (
+            <div className="p-10 text-center text-gray-400">Loading...</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+                  <tr>
+                    {tab === "courses" && ["Title", "Category", "Level", "Enrolled", "Actions"].map((h) => (
+                      <th key={h} className="text-left px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{h}</th>
+                    ))}
+                    {tab === "jobs" && ["Title", "Company", "Type", "Location", "Actions"].map((h) => (
+                      <th key={h} className="text-left px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{h}</th>
+                    ))}
+                    {tab === "tests" && ["Title", "Category", "Questions", "Duration", "Actions"].map((h) => (
+                      <th key={h} className="text-left px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{h}</th>
+                    ))}
                   </tr>
-                ))}
-                {tab === "jobs" && jobs.map((j, i) => (
-                  <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                    <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">{j.title}</td>
-                    <td className="px-6 py-4 text-gray-500">{j.company}</td>
-                    <td className="px-6 py-4">
-                      <Badge variant="default" className="capitalize">{j.type}</Badge>
-                    </td>
-                    <td className="px-6 py-4 text-gray-500">{j.location}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        <button onClick={() => openEdit(j)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500">
-                          <Pencil className="w-4 h-4" />
-                        </button>
-                        <button onClick={() => handleDelete(j.title)} className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-400">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-                {tab === "tests" && staticTests.map((t, i) => (
-                  <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                    <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">{t.title}</td>
-                    <td className="px-6 py-4 text-gray-500">{t.category}</td>
-                    <td className="px-6 py-4 text-gray-500">{t.questions}</td>
-                    <td className="px-6 py-4 text-gray-500">{t.duration} min</td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        <button className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500">
-                          <Pencil className="w-4 h-4" />
-                        </button>
-                        <button className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-400">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                  {items.length === 0 && (
+                    <tr><td colSpan={5} className="px-6 py-10 text-center text-gray-400">No items found</td></tr>
+                  )}
+                  {tab === "courses" && items.map((c) => (
+                    <tr key={c._id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">{c.title}</td>
+                      <td className="px-6 py-4 text-gray-500">{c.category}</td>
+                      <td className="px-6 py-4">
+                        <Badge variant={c.level === "beginner" ? "success" : c.level === "intermediate" ? "warning" : "danger"}>
+                          {c.level}
+                        </Badge>
+                      </td>
+                      <td className="px-6 py-4 text-gray-500">{c.enrolledCount?.toLocaleString()}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2">
+                          <button onClick={() => openEdit(c)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500"><Pencil className="w-4 h-4" /></button>
+                          <button onClick={() => handleDelete(c._id)} className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-400"><Trash2 className="w-4 h-4" /></button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {tab === "jobs" && items.map((j) => (
+                    <tr key={j._id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">{j.title}</td>
+                      <td className="px-6 py-4 text-gray-500">{j.company}</td>
+                      <td className="px-6 py-4"><Badge variant="default" className="capitalize">{j.type}</Badge></td>
+                      <td className="px-6 py-4 text-gray-500">{j.location}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2">
+                          <button onClick={() => openEdit(j)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500"><Pencil className="w-4 h-4" /></button>
+                          <button onClick={() => handleDelete(j._id)} className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-400"><Trash2 className="w-4 h-4" /></button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {tab === "tests" && items.map((t) => (
+                    <tr key={t._id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                      <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">{t.title}</td>
+                      <td className="px-6 py-4 text-gray-500">{t.category}</td>
+                      <td className="px-6 py-4 text-gray-500">{t.questions?.length ?? 0}</td>
+                      <td className="px-6 py-4 text-gray-500">{t.duration} min</td>
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2">
+                          <button onClick={() => openEdit(t)} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500"><Pencil className="w-4 h-4" /></button>
+                          <button onClick={() => handleDelete(t._id)} className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-400"><Trash2 className="w-4 h-4" /></button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Add/Edit Modal */}
-      <Modal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title={`${editItem ? "Edit" : "Add"} ${tab.slice(0, -1)}`}
-      >
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={`${editItem ? "Edit" : "Add"} ${tab.slice(0, -1)}`}>
         <div className="space-y-3">
           {tab === "courses" && (
             <>
@@ -232,6 +256,13 @@ export default function AdminPage() {
                 <option value="part-time">Part-time</option>
                 <option value="remote">Remote</option>
               </select>
+            </>
+          )}
+          {tab === "tests" && (
+            <>
+              <input className="input" placeholder="Title" value={form.title || ""} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+              <input className="input" placeholder="Category" value={form.category || ""} onChange={(e) => setForm({ ...form, category: e.target.value })} />
+              <input className="input" type="number" placeholder="Duration (minutes)" value={form.duration || ""} onChange={(e) => setForm({ ...form, duration: Number(e.target.value) })} />
             </>
           )}
           <div className="flex gap-3 pt-2">

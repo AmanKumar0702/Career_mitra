@@ -15,14 +15,8 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const type = searchParams.get("type");
 
-    const stale = await Job.findOne({ applyUrl: "#" });
-    if (stale) {
-      await Job.deleteMany({});
-      await Job.insertMany(sampleJobs);
-    } else {
-      const total = await Job.countDocuments();
-      if (total === 0) await Job.insertMany(sampleJobs);
-    }
+    const total = await Job.countDocuments();
+    if (total === 0) await Job.insertMany(sampleJobs);
 
     const query: Record<string, unknown> = {};
     if (type) query.type = type;
