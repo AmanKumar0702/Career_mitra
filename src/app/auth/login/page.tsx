@@ -3,7 +3,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { GraduationCap, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function LoginPage() {
@@ -46,8 +46,32 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#050810] bg-grid p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-cyan-500 font-bold text-2xl mb-2">
-            <GraduationCap className="w-8 h-8" /> CareerMitra
+          <Link href="/" className="inline-flex items-center gap-2.5 font-bold text-2xl mb-2 no-underline">
+            <div className="relative w-10 h-10 flex-shrink-0">
+              <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-10 h-10">
+                <defs>
+                  <linearGradient id="loginLogoGrad" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stopColor="#06b6d4" />
+                    <stop offset="100%" stopColor="#6366f1" />
+                  </linearGradient>
+                </defs>
+                <rect width="36" height="36" rx="10" fill="url(#loginLogoGrad)" />
+                {/* Book stacked pages */}
+                <rect x="6" y="22" width="24" height="3" rx="1" fill="white" opacity="0.9" />
+                <rect x="8" y="19" width="20" height="3" rx="1" fill="white" opacity="0.7" />
+                <rect x="10" y="16" width="16" height="3" rx="1" fill="white" opacity="0.5" />
+                {/* Trophy cup */}
+                <path d="M14 6h8v6c0 2.21-1.79 4-4 4s-4-1.79-4-4V6z" fill="white" opacity="0.95" />
+                {/* Trophy handles */}
+                <path d="M14 8h-2a2 2 0 000 4h2" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.95" />
+                <path d="M22 8h2a2 2 0 010 4h-2" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.95" />
+                {/* Trophy stem */}
+                <rect x="17" y="16" width="2" height="3" rx="0.5" fill="white" opacity="0.9" />
+                {/* Trophy base */}
+                <rect x="14" y="19" width="8" height="1.5" rx="0.75" fill="white" opacity="0.9" />
+              </svg>
+            </div>
+            <span className="text-cyan-500">Learn<span className="text-gray-900 dark:text-white">2Earn</span></span>
           </Link>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mt-4">Welcome back</h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Sign in to continue your journey</p>

@@ -18,7 +18,24 @@ export async function GET() {
     await connectDB();
 
     const user = await User.findOne({ email: session.user.email }).select("-password").lean();
-    return NextResponse.json(user || mockUser);
+    if (!user) return NextResponse.json(mockUser);
+
+    // Update streak on first fetch of the day
+    const today = new Date().toDateString();
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const dbUser = user as any;
+    if (dbUser.lastActiveDate !== today) {
+      const wasYesterday = dbUser.lastActiveDate === yesterday.toDateString();
+      const newStreak = wasYesterday ? (dbUser.streak || 0) + 1 : 1;
+      await (await import("@/models/User")).User.findOneAndUpdate(
+        { email: session.user.email },
+        { lastActiveDate: today, streak: newStreak }
+      );
+      return NextResponse.json({ ...dbUser, streak: newStreak, lastActiveDate: today });
+    }
+
+    return NextResponse.json(user);
   } catch {
     return NextResponse.json(mockUser);
   }

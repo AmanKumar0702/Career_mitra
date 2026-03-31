@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
-import { BookOpen, ClipboardList, Compass, Briefcase, Flame, Star, Trophy, TrendingUp, FileText, Zap, Target, ChevronRight, Calendar } from "lucide-react";
+import { BookOpen, ClipboardList, Compass, Briefcase, Flame, Star, Trophy, TrendingUp, FileText, Zap, Target, ChevronRight, Calendar, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+import { AnimatePresence } from "framer-motion";
+import OnboardingModal from "@/components/ui/OnboardingModal";
 
 const quickLinks = [
   { icon: BookOpen, title: "Learning Platform", desc: "Continue your courses", href: "/learn", color: "text-cyan-500", badge: "500+ Courses" },
@@ -73,6 +75,7 @@ export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/auth/login");
@@ -80,7 +83,17 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (session) {
-      fetch("/api/user").then((r) => r.json()).then(setUser).catch(() => {});
+      fetch("/api/user").then((r) => r.json()).then((data) => {
+        setUser(data);
+        // Show onboarding if new user (xp === 0 and no courses)
+        if (!data.xp && !data.completedCourses?.length) {
+          const seen = localStorage.getItem("onboarding_seen");
+          if (!seen) {
+            setShowOnboarding(true);
+            localStorage.setItem("onboarding_seen", "1");
+          }
+        }
+      }).catch(() => {});
     }
   }, [session]);
 
@@ -116,6 +129,15 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e]">
       <Navbar />
+
+      <AnimatePresence>
+        {showOnboarding && (
+          <OnboardingModal
+            userName={name}
+            onClose={() => setShowOnboarding(false)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Welcome Banner */}
       <div className="bg-gradient-to-r from-cyan-600 via-cyan-700 to-indigo-700 text-white">
@@ -305,6 +327,74 @@ export default function DashboardPage() {
             </Link>
           </div>
         </Card3D>
+
+        {/* ── Daily Goal ── */}
+        <Card3D>
+          <div className="p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold text-gray-900 dark:text-white text-sm flex items-center gap-2">
+                <Target className="w-4 h-4 text-cyan-500" /> Daily Goal
+              </h3>
+              <span className="text-xs text-cyan-500 font-semibold">{Math.min(completedCourses, 3)}/3 tasks</span>
+            </div>
+            <div className="space-y-3">
+              {[
+                { label: "Enroll in a course", done: completedCourses > 0, xp: "+50 XP" },
+                { label: "Take a test", done: completedTests > 0, xp: "+10 XP" },
+                { label: "Visit Career Guidance", done: false, xp: "+5 XP" },
+              ].map((task) => (
+                <div key={task.label} className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                  task.done
+                    ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
+                    : "bg-gray-50 dark:bg-[#1e293b] border-gray-100 dark:border-[#263548]"
+                }`}>
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                    task.done ? "bg-green-500 border-green-500" : "border-gray-300 dark:border-slate-600"
+                  }`}>
+                    {task.done && <span className="text-white text-xs">✓</span>}
+                  </div>
+                  <span className={`text-sm flex-1 ${task.done ? "line-through text-gray-400" : "text-gray-700 dark:text-slate-300"}`}>{task.label}</span>
+                  <span className="text-xs font-semibold text-cyan-500">{task.xp}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card3D>
+
+        {/* ── Recommended Courses ── */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-bold text-gray-900 dark:text-white text-sm flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-cyan-500" /> Recommended for You
+            </h3>
+            <Link href="/learn" className="text-xs text-cyan-500 hover:text-cyan-600 font-semibold flex items-center gap-1">
+              View all <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              { title: "Python for Beginners", category: "Technology", level: "Beginner", xp: "+50 XP", color: "from-blue-500 to-cyan-500" },
+              { title: "Class 10 Science (CBSE)", category: "Science", level: "Intermediate", xp: "+50 XP", color: "from-green-500 to-emerald-500" },
+              { title: "Communication & Soft Skills", category: "Soft Skills", level: "Beginner", xp: "+50 XP", color: "from-purple-500 to-violet-500" },
+            ].map((c) => (
+              <Link key={c.title} href="/learn" className="group block">
+                <Card3D>
+                  <div className={`h-20 bg-gradient-to-br ${c.color} flex items-center justify-center`}>
+                    <BookOpen className="w-8 h-8 text-white/80" />
+                  </div>
+                  <div className="p-4">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs text-gray-400">{c.category}</span>
+                      <span className="ml-auto text-xs font-bold text-cyan-500">{c.xp}</span>
+                    </div>
+                    <h4 className="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-cyan-500 transition-colors line-clamp-2">{c.title}</h4>
+                    <span className="text-xs text-gray-400 mt-1 block">{c.level}</span>
+                  </div>
+                </Card3D>
+              </Link>
+            ))}
+          </div>
+        </div>
 
       </div>
     </div>

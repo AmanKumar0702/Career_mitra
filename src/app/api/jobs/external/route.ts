@@ -67,9 +67,11 @@ function formatSalary(min: number, max: number, currency: string): string {
   return "";
 }
 
-// Fetch from JSearch
+// Fetch from JSearch — URL is hardcoded, not user-supplied (SSRF safe)
 async function fetchFromJSearch(query: string, page = 1): Promise<any[]> {
-  const url = `https://${JSEARCH_HOST}/search?query=${encodeURIComponent(query)}&page=${page}&num_pages=1&country=in&date_posted=week`;
+  // Sanitize query param — only allow alphanumeric, spaces, common punctuation
+  const safeQuery = query.replace(/[^a-zA-Z0-9 .,\-]/g, "").slice(0, 100);
+  const url = `https://${JSEARCH_HOST}/search?query=${encodeURIComponent(safeQuery)}&page=${page}&num_pages=1&country=in&date_posted=week`;
   const res = await fetch(url, {
     headers: {
       "x-rapidapi-key": RAPIDAPI_KEY,

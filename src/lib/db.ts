@@ -15,6 +15,11 @@ export async function connectDB() {
     throw new Error("MONGODB_URI is not defined in .env.local");
   }
 
+  // Validate it's a proper MongoDB URI (prevent SSRF)
+  if (!MONGODB_URI.startsWith("mongodb://") && !MONGODB_URI.startsWith("mongodb+srv://")) {
+    throw new Error("Invalid MONGODB_URI format");
+  }
+
   const cached = global._mongooseCache;
 
   if (cached.conn) return cached.conn;

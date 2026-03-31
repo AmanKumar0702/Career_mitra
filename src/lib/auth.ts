@@ -15,6 +15,8 @@ const providers: NextAuthOptions["providers"] = [
     async authorize(credentials) {
       try {
         if (!credentials?.email || !credentials?.password) return null;
+        // Basic input length validation
+        if (credentials.email.length > 254 || credentials.password.length > 128) return null;
         await connectDB();
         const user = await User.findOne({ email: credentials.email.toLowerCase().trim() });
         if (!user || !user.password) return null;
@@ -58,12 +60,35 @@ export const authOptions: NextAuthOptions = {
               email: user.email,
               image: user.image,
             });
+          } else {
+            // Update image if changed
+            if (user.image && existing.image !== user.image) {
+              await User.findOneAndUpdate({ email: user.email }, { image: user.image });
+            }
           }
         } catch (err) {
           console.error("[NextAuth] Google signIn error:", err);
           return false;
         }
       }
+
+      // Update streak on every sign-in
+      try {
+        await connectDB();
+        const today = new Date().toDateString();
+        const dbUser = await User.findOne({ email: user.email });
+        if (dbUser && dbUser.lastActiveDate !== today) {
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          const wasYesterday = dbUser.lastActiveDate === yesterday.toDateString();
+          const newStreak = wasYesterday ? (dbUser.streak || 0) + 1 : 1;
+          await User.findOneAndUpdate(
+            { email: user.email },
+            { lastActiveDate: today, streak: newStreak }
+          );
+        }
+      } catch { /* non-critical */ }
+
       return true;
     },
     async jwt({ token, user }) {

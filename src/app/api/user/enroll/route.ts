@@ -29,8 +29,11 @@ export async function POST(req: NextRequest) {
   // Award XP and update streak
   const today = new Date().toDateString();
   const lastActive = (user as any).lastActiveDate;
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const wasYesterday = lastActive === yesterday.toDateString();
   const isNewDay = lastActive !== today;
-  const newStreak = isNewDay ? (user.streak || 0) + 1 : user.streak;
+  const newStreak = isNewDay ? (wasYesterday ? (user.streak || 0) + 1 : 1) : user.streak;
 
   // Badge logic
   const newBadges = [...user.badges];

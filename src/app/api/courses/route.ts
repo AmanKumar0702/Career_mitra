@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { sampleCourses } from "@/data/courses";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function GET(request: Request) {
   try {
@@ -34,5 +36,27 @@ export async function GET(request: Request) {
   } catch (err) {
     console.error("[Courses API]", err);
     return NextResponse.json([], { status: 200 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const { connectDB } = await import("@/lib/db");
+    const { Course } = await import("@/models/Course");
+    await connectDB();
+
+    const body = await request.json();
+    if (!body.title || !body.category) {
+      return NextResponse.json({ error: "title and category are required" }, { status: 400 });
+    }
+
+    const course = await Course.create(body);
+    return NextResponse.json(course, { status: 201 });
+  } catch (err: any) {
+    console.error("[Courses POST]", err);
+    return NextResponse.json({ error: err?.message || "Server error" }, { status: 500 });
   }
 }

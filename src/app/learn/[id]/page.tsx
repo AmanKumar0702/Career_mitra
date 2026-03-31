@@ -6,8 +6,10 @@ import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import { Badge } from "@/components/ui/Badge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { ChevronLeft, ChevronRight, BookOpen, Clock, CheckCircle, Lock, Play, ArrowLeft, Star, Users, Loader2, Menu, X, Youtube } from "lucide-react";
+import { ChevronLeft, ChevronRight, BookOpen, Clock, CheckCircle, Lock, Play, ArrowLeft, Star, Users, Loader2, Menu, X, Youtube, Award } from "lucide-react";
 import toast from "react-hot-toast";
+import { AnimatePresence } from "framer-motion";
+import Certificate from "@/components/ui/Certificate";
 
 export default function CourseStudyPage() {
   const { id } = useParams();
@@ -20,6 +22,8 @@ export default function CourseStudyPage() {
   const [enrolled, setEnrolled] = useState(false);
   const [enrolling, setEnrolling] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showCertificate, setShowCertificate] = useState(false);
+  const [userName, setUserName] = useState("Student");
 
   useEffect(() => {
     fetch(`/api/courses/${id}`)
@@ -32,6 +36,7 @@ export default function CourseStudyPage() {
     if (session) {
       fetch("/api/user").then((r) => r.json()).then((u) => {
         setEnrolled(u.completedCourses?.includes(id));
+        setUserName(u.name || "Student");
         const saved = localStorage.getItem(`course-progress-${id}`);
         if (saved) setCompletedLessons(JSON.parse(saved));
       }).catch(() => {});
@@ -97,6 +102,17 @@ export default function CourseStudyPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f1e] flex flex-col">
       <Navbar />
+
+      <AnimatePresence>
+        {showCertificate && (
+          <Certificate
+            courseName={course.title}
+            studentName={userName}
+            date={new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
+            onClose={() => setShowCertificate(false)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Course Header */}
       <div className={`bg-gradient-to-r ${grad} text-white py-6`}>
@@ -314,9 +330,9 @@ export default function CourseStudyPage() {
                         Next <ChevronRight className="w-4 h-4" />
                       </button>
                     ) : progress === 100 ? (
-                      <Link href="/learn" className="btn-primary flex items-center gap-2 text-sm py-2.5 px-5 bg-green-600 hover:bg-green-700">
-                        <CheckCircle className="w-4 h-4" /> Course Complete
-                      </Link>
+                      <button onClick={() => setShowCertificate(true)} className="btn-primary flex items-center gap-2 text-sm py-2.5 px-5" style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }}>
+                        <Award className="w-4 h-4" /> Get Certificate
+                      </button>
                     ) : null}
                   </div>
                 </div>

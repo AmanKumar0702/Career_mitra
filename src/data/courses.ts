@@ -2093,6 +2093,189 @@ Nephron is the functional unit of the kidney.
   ],
 });
 
+// ── Class 11 ─────────────────────────────────────────────────────────────────
+sampleCourses.push({
+  title: "Physics Class 11 (CBSE)",
+  description: "Kinematics, laws of motion, work-energy, gravitation and thermodynamics for Class 11.",
+  category: "Physics", educationGroup: "class11", language: "Hindi", level: "intermediate",
+  duration: "16 hours", instructor: "Mr. Nitin Vijay",
+  tags: ["physics", "class11", "cbse", "kinematics", "mechanics"], enrolledCount: 32000, rating: 4.8, reviewCount: 3200, featured: true,
+  whatYouLearn: ["Solve kinematics problems", "Apply Newton's laws", "Understand work and energy", "Study gravitation"],
+  lessons: [
+    { title: "Kinematics", duration: "40 min", type: "video", content: "# Kinematics\n\n## Equations of Motion\n- v = u + at\n- s = ut + (1/2)at^2\n- v^2 = u^2 + 2as\n\n## Projectile Motion\n- Range: R = u^2 sin(2theta)/g\n- Max height: H = u^2 sin^2(theta)/(2g)\n\n## Graphs\n- Slope of s-t graph = velocity\n- Slope of v-t graph = acceleration\n- Area under v-t graph = displacement\n\nPractice: A ball thrown at 30 m/s at 45 degrees. Find range. (g=10)" },
+    { title: "Laws of Motion", duration: "35 min", type: "video", content: "# Newton's Laws\n\n## First Law\nObject stays at rest or uniform motion unless external force acts.\n\n## Second Law\nF = ma (unit: Newton)\n\n## Third Law\nEvery action has equal and opposite reaction.\n\n## Friction\n- Static: f_s <= mu_s * N\n- Kinetic: f_k = mu_k * N\n\nPractice: 5 kg block pushed with 20N, mu=0.3. Find acceleration." },
+    { title: "Work, Energy and Power", duration: "35 min", type: "video", content: "# Work, Energy and Power\n\n## Work\nW = F * d * cos(theta), Unit: Joule\n\n## Kinetic Energy\nKE = (1/2) * m * v^2\n\n## Potential Energy\nPE = mgh (gravitational)\n\n## Work-Energy Theorem\nW_net = KE_final - KE_initial\n\n## Power\nP = W/t = F * v, Unit: Watt\n\nPractice: 2 kg ball falls 10 m. Find KE just before hitting ground." },
+  ],
+});
+
+sampleCourses.push({
+  title: "Accountancy Class 11 (CBSE)",
+  description: "Journal entries, ledger, trial balance and financial statements — complete Class 11 Accountancy.",
+  category: "Accountancy", educationGroup: "class11", language: "Hindi", level: "intermediate",
+  duration: "12 hours", instructor: "Mrs. Meena Agarwal",
+  tags: ["accountancy", "class11", "cbse", "journal", "ledger", "commerce"], enrolledCount: 19000, rating: 4.6, reviewCount: 1900,
+  whatYouLearn: ["Record journal entries", "Post to ledger accounts", "Prepare trial balance", "Create financial statements"],
+  lessons: [
+    { title: "Introduction to Accounting", duration: "25 min", type: "video", content: "# Introduction to Accounting\n\n## What is Accounting?\nRecording, classifying, summarising and interpreting financial transactions.\n\n## Basic Terms\n- Assets: what business owns\n- Liabilities: what business owes\n- Capital: owner's investment\n- Revenue: income earned\n- Expenses: costs incurred\n\n## Golden Rules\n- Personal Account: Debit the receiver, Credit the giver\n- Real Account: Debit what comes in, Credit what goes out\n- Nominal Account: Debit expenses/losses, Credit incomes/gains\n\nPractice: Classify cash, bank loan, sales, rent paid, owner's capital." },
+    { title: "Journal and Ledger", duration: "35 min", type: "video", content: "# Journal and Ledger\n\n## Journal\nBook of original entry. Format: Date | Particulars | L.F. | Dr | Cr\n\n## Example\nJan 1: Started business with cash Rs 50,000\nCash A/c Dr 50,000\n  To Capital A/c 50,000\n\nJan 5: Purchased goods Rs 10,000\nPurchases A/c Dr 10,000\n  To Cash A/c 10,000\n\n## Ledger\nBook of final entry. Each account has a T-format page.\n\n## Balancing\n1. Total both sides\n2. Put difference as balance c/d on smaller side\n3. Bring down as balance b/d\n\nPractice: Journalise and post to ledger: started business Rs 1,00,000; bought furniture Rs 20,000; sold goods Rs 15,000." },
+  ],
+});
+
+// ── Class 12 ─────────────────────────────────────────────────────────────────
+sampleCourses.push({
+  title: "Chemistry Class 12 (CBSE)",
+  description: "Solid state, solutions, electrochemistry, chemical kinetics and organic chemistry for boards.",
+  category: "Chemistry", educationGroup: "class12", language: "Hindi", level: "advanced",
+  duration: "20 hours", instructor: "Dr. Sanjay Sharma",
+  tags: ["chemistry", "class12", "cbse", "organic", "electrochemistry"], enrolledCount: 38000, rating: 4.8, reviewCount: 3800, featured: true,
+  whatYouLearn: ["Understand solid state and solutions", "Master electrochemistry", "Study chemical kinetics", "Learn organic reaction mechanisms"],
+  lessons: [
+    { title: "Solid State", duration: "35 min", type: "video", content: "# Solid State\n\n## Types of Solids\n- Crystalline: regular arrangement, sharp melting point (NaCl, diamond)\n- Amorphous: irregular arrangement, no sharp melting point (glass)\n\n## Types of Crystalline Solids\n- Ionic: NaCl — high MP, conducts in molten state\n- Covalent: diamond — very hard, high MP\n- Metallic: Fe — conducts electricity, malleable\n- Molecular: ice — low MP, soft\n\n## Packing Efficiency\n- Simple cubic: 52.4%\n- BCC: 68%\n- FCC: 74%\n\n## Defects\n- Schottky: missing ions, density decreases\n- Frenkel: ion displaced to interstitial site, density unchanged\n\nPractice: Calculate packing efficiency of BCC. What is coordination number in FCC?" },
+    { title: "Electrochemistry", duration: "40 min", type: "video", content: "# Electrochemistry\n\n## Cells\n- Galvanic: chemical → electrical energy\n- Electrolytic: electrical → chemical energy\n\n## Nernst Equation\nE = E° - (0.0592/n) * log(Q) at 298K\n\n## Faraday's Laws\n1st: m = (M/nF) * I * t\n2nd: masses proportional to equivalent weights\n\n## Conductance\n- Molar conductance increases with dilution\n- Strong electrolytes: linear increase\n- Weak electrolytes: sharp increase at high dilution\n\nPractice: Mass of Cu deposited by 2A for 30 min. (M=63.5, n=2)" },
+    { title: "Organic Reaction Mechanisms", duration: "45 min", type: "video", content: "# Organic Reaction Mechanisms\n\n## Bond Fission\n- Homolytic: each atom gets one electron → free radicals\n- Heterolytic: both electrons to one atom → ions\n\n## Reaction Types\n- SN1: two steps, first order, racemisation\n- SN2: one step, second order, inversion of configuration\n- E1: two steps elimination\n- E2: one step, anti-periplanar\n\n## Markovnikov's Rule\nH adds to carbon with more H atoms.\nCH3-CH=CH2 + HBr → CH3-CHBr-CH3 (major)\n\nPractice: Predict major product of CH3CH=CH2 + HCl and CH3CH=CH2 + Br2/H2O" },
+  ],
+});
+
+sampleCourses.push({
+  title: "Business Studies Class 12 (CBSE)",
+  description: "Management principles, business environment, planning, organising, staffing and controlling.",
+  category: "Business", educationGroup: "class12", language: "Hindi", level: "intermediate",
+  duration: "10 hours", instructor: "Mr. Rajesh Gupta",
+  tags: ["business", "class12", "cbse", "management", "commerce"], enrolledCount: 22000, rating: 4.5, reviewCount: 2200,
+  whatYouLearn: ["Understand management principles", "Study business environment", "Learn planning and organising", "Master staffing and directing"],
+  lessons: [
+    { title: "Nature and Significance of Management", duration: "25 min", type: "video", content: "# Nature and Significance of Management\n\n## What is Management?\nProcess of planning, organising, staffing, directing and controlling to achieve goals efficiently.\n\n## Levels of Management\n- Top: Board, CEO — sets goals\n- Middle: Departmental managers — implements policies\n- Lower: Supervisors — directs workers\n\n## Functions (POSDC)\n- Planning, Organising, Staffing, Directing, Controlling\n\n## Management as Science, Art and Profession\n- Science: systematic knowledge\n- Art: personal skill in application\n- Profession: specialised knowledge + ethical code\n\nPractice: Why is management called a goal-oriented process? Give example." },
+    { title: "Principles of Management", duration: "30 min", type: "video", content: "# Principles of Management\n\n## Fayol's 14 Principles (key ones)\n1. Division of Work — specialisation\n2. Authority = Responsibility\n3. Unity of Command — one boss\n4. Unity of Direction — one plan\n5. Scalar Chain — chain of command\n6. Equity — fairness\n7. Esprit de Corps — team spirit\n\n## Taylor's Scientific Management\n- Science not rule of thumb\n- Harmony not discord\n- Cooperation not individualism\n- Maximum output\n\n## Techniques\n- Time study, Motion study, Fatigue study\n- Differential piece wage system\n\nPractice: Distinguish between Fayol's and Taylor's contributions." },
+  ],
+});
+
+// ── Graduate Extra ────────────────────────────────────────────────────────────
+sampleCourses.push({
+  title: "Data Science with Python",
+  description: "NumPy, Pandas, Matplotlib and machine learning basics — become a data scientist from scratch.",
+  category: "Technology", educationGroup: "graduate", language: "English", level: "intermediate",
+  duration: "15 hours", instructor: "Mr. Krish Naik",
+  tags: ["data science", "python", "pandas", "machine learning", "numpy"], enrolledCount: 18000, rating: 4.9, reviewCount: 1800, featured: true,
+  whatYouLearn: ["Use NumPy for numerical computing", "Analyse data with Pandas", "Visualise data with Matplotlib", "Build ML models with scikit-learn"],
+  prerequisites: ["Basic Python knowledge", "High school mathematics"],
+  lessons: [
+    { title: "NumPy Fundamentals", duration: "30 min", type: "video", content: "# NumPy Fundamentals\n\n## Creating Arrays\nimport numpy as np\na = np.array([1,2,3])\nb = np.zeros((3,3))\nc = np.arange(0,10,2)\nd = np.linspace(0,1,5)\n\n## Operations\na + b, a * b, a**2, np.dot(a,b)\n\n## Indexing\nmat = np.array([[1,2,3],[4,5,6]])\nmat[0,1]   # 2\nmat[:,1]   # [2,5] second column\nmat[1:,:2] # [[4,5]]\n\nPractice: Create 4x4 random integer matrix. Find mean, max, min of each row." },
+    { title: "Pandas for Data Analysis", duration: "35 min", type: "video", content: "# Pandas for Data Analysis\n\n## Creating DataFrames\nimport pandas as pd\ndf = pd.DataFrame({'Name':['Aman','Priya'],'Marks':[92,85]})\n\n## Reading Data\ndf = pd.read_csv('data.csv')\ndf.head(), df.info(), df.describe()\n\n## Filtering\ndf[df['Marks'] >= 90]\ndf[(df['Marks']>=80) & (df['Grade']=='A')]\n\n## Grouping\ndf.groupby('Grade')['Marks'].mean()\n\nPractice: Load any CSV. Find top 5 rows, check missing values, calculate mean of numeric columns." },
+  ],
+});
+
+// ── Skills Extra ──────────────────────────────────────────────────────────────
+sampleCourses.push({
+  title: "Communication & Soft Skills",
+  description: "Public speaking, email writing, interview skills, body language and professional communication.",
+  category: "Soft Skills", educationGroup: "skills", language: "English", level: "beginner",
+  duration: "6 hours", instructor: "Ms. Anita Desai",
+  tags: ["soft skills", "communication", "interview", "public speaking", "career"], enrolledCount: 14000, rating: 4.7, reviewCount: 1400,
+  whatYouLearn: ["Speak confidently in public", "Write professional emails", "Crack job interviews", "Use positive body language"],
+  lessons: [
+    { title: "Public Speaking Fundamentals", duration: "25 min", type: "video", content: "# Public Speaking\n\n## The 3 Vs\n- Verbal (7%): words\n- Vocal (38%): tone, pace, volume\n- Visual (55%): body language, eye contact\n\n## Overcoming Stage Fear\n1. Prepare thoroughly\n2. Practice out loud\n3. Breathe deeply\n4. Focus on message not yourself\n5. Start with a smile\n\n## Speech Structure\n- Opening: hook (question/story/fact)\n- Body: 3 main points with examples\n- Closing: summarise + call to action\n\nPractice: Prepare 2-minute speech on your favourite topic. Record and watch it back." },
+    { title: "Interview Skills", duration: "30 min", type: "video", content: "# Interview Skills\n\n## Common Questions\n1. Tell me about yourself → education, skills, goals (1-2 min)\n2. Why this job? → connect skills to their needs\n3. Strengths? → 2-3 with examples\n4. Weaknesses? → honest + how improving\n5. 5-year plan? → ambitious but realistic\n\n## STAR Method\n- Situation, Task, Action, Result\n\n## Before Interview\n- Research the company\n- Dress professionally\n- Reach 10-15 min early\n- Carry resume copies\n\nPractice: Do mock interview with a friend. Record and identify improvements." },
+    { title: "Professional Email Writing", duration: "20 min", type: "video", content: "# Professional Email Writing\n\n## Structure\n1. Subject: clear and specific\n2. Greeting: Dear Mr./Ms. [Name]\n3. Opening: state purpose in first line\n4. Body: short paragraphs\n5. Closing: next steps\n6. Sign-off: Regards + name\n\n## Example Subject Lines\nGood: Application for Marketing Intern — Aman Kumar\nBad: Job / Hello\n\n## Common Mistakes\n- Spelling errors\n- Too long or too short\n- Informal language\n- No subject line\n- Forgetting attachments\n\nPractice: Write email applying for part-time job at a local company." },
+  ],
+});
+
+// ── Class 1-5 Extra ─────────────────────────────────────────────────────────
+sampleCourses.push({
+  title: "Hindi Vyakaran (Class 1-5)",
+  description: "Varnamala, shabd, vakya aur matra — Class 1 se 5 tak Hindi ki buniyad mazboot karo.",
+  category: "English", educationGroup: "class1to5", language: "Hindi", level: "beginner",
+  duration: "4 hours", instructor: "Mrs. Sunita Sharma",
+  tags: ["hindi", "vyakaran", "class1", "class5", "varnamala"], enrolledCount: 11000, rating: 4.7, reviewCount: 1100,
+  whatYouLearn: ["Varnamala yaad karo", "Shabd aur vakya banao", "Matra ka sahi prayog karo", "Nibandh likhna seekho"],
+  lessons: [
+    { title: "Varnamala aur Swar-Vyanjan", duration: "20 min", type: "video", content: "# Varnamala\n\n## Swar (Vowels)\nA, Aa, I, Ee, U, Oo, E, Ai, O, Au, An, Ah\n\n## Vyanjan (Consonants)\nKa, Kha, Ga, Gha... (36 vyanjan)\n\n## Matra\n- Aa ki matra: aa\n- I ki matra: i\n- Ee ki matra: ee\n\n## Shabd Banana\nV + a + r + n = Varn\nM + a + t + r + a = Matra\n\nAbhyas: 5 swar aur 5 vyanjan likhkar unse shabd banao." },
+    { title: "Shabd aur Vakya", duration: "20 min", type: "video", content: "# Shabd aur Vakya\n\n## Shabd kya hai?\nAksharom ka samuh jo kuch arth rakhta ho.\n\n## Vakya kya hai?\nShabdom ka samuh jo poora arth de.\n\n## Vakya ke prakar\n- Sadharan vakya: Ram khata hai.\n- Prashna vakya: Ram kya khata hai?\n- Aagya vakya: Baitho.\n\nAbhyas: 5 shabd likhkar unse vakya banao." },
+  ],
+});
+
+sampleCourses.push({
+  title: "Computer Basics for Kids (Class 3-5)",
+  description: "Parts of computer, MS Paint, keyboard shortcuts and internet safety for young learners.",
+  category: "Technology", educationGroup: "class1to5", language: "English", level: "beginner",
+  duration: "3 hours", instructor: "Mr. Suresh Kumar",
+  tags: ["computer", "class3", "class5", "ms paint", "keyboard"], enrolledCount: 9000, rating: 4.6, reviewCount: 900,
+  whatYouLearn: ["Know parts of a computer", "Use keyboard and mouse", "Draw in MS Paint", "Stay safe on the internet"],
+  lessons: [
+    { title: "Parts of a Computer", duration: "15 min", type: "video", content: "# Parts of a Computer\n\n## Input Devices\n- Keyboard: type letters and numbers\n- Mouse: point and click\n- Microphone: record voice\n- Camera: capture images\n\n## Output Devices\n- Monitor: displays information\n- Printer: prints on paper\n- Speaker: plays sound\n\n## Storage Devices\n- Hard disk: stores all files\n- Pen drive: portable storage\n- CD/DVD: read-only storage\n\n## CPU\nCentral Processing Unit — the brain of the computer.\n\nPractice: Name 2 input and 2 output devices you can see around you." },
+    { title: "Keyboard and Mouse Skills", duration: "20 min", type: "video", content: "# Keyboard and Mouse Skills\n\n## Mouse Actions\n- Click: select an item\n- Double click: open a file\n- Right click: open menu\n- Scroll: move up/down\n- Drag: move items\n\n## Important Keys\n- Enter: confirm/go to next line\n- Backspace: delete left\n- Delete: delete right\n- Space bar: add space\n- Shift: capital letters\n- Caps Lock: all capitals\n\n## Useful Shortcuts\n- Ctrl+C: Copy\n- Ctrl+V: Paste\n- Ctrl+Z: Undo\n- Ctrl+S: Save\n- Ctrl+A: Select all\n\nPractice: Open Notepad and type your name, address and school name using correct keys." },
+  ],
+});
+
+// ── Class 6-8 Extra ──────────────────────────────────────────────────────────
+sampleCourses.push({
+  title: "Social Science Class 6-8",
+  description: "History, Geography and Civics — ancient civilisations, Indian geography and democracy basics.",
+  category: "Social Science", educationGroup: "class6to8", language: "Hindi", level: "beginner",
+  duration: "7 hours", instructor: "Mr. Deepak Sharma",
+  tags: ["sst", "history", "geography", "civics", "class7", "class8"], enrolledCount: 14000, rating: 4.5, reviewCount: 1400,
+  whatYouLearn: ["Learn about ancient civilisations", "Understand Indian geography", "Know basics of democracy", "Study the Indian Constitution"],
+  lessons: [
+    { title: "Ancient Civilisations of India", duration: "25 min", type: "video", content: "# Ancient Civilisations\n\n## Indus Valley Civilisation (3300-1300 BCE)\n- Major cities: Mohenjo-daro, Harappa, Lothal\n- Features: planned cities, drainage system, standardised weights\n\n## Vedic Period (1500-600 BCE)\n- Aryans composed the four Vedas\n- Society divided into four varnas\n\n## Maurya Empire (322-185 BCE)\n- Founded by Chandragupta Maurya\n- Greatest ruler: Ashoka — spread Buddhism after Kalinga War\n- Arthashastra written by Chanakya\n\nPractice: List 3 features of Indus Valley Civilisation showing it was advanced." },
+    { title: "Indian Geography", duration: "30 min", type: "video", content: "# Indian Geography\n\n## Physical Features\n- Himalayas: highest range, source of Ganga, Yamuna, Brahmaputra\n- Northern Plains: most fertile, granary of India\n- Peninsular Plateau: oldest landmass, rich in minerals\n- Coastal Plains: Western (narrow), Eastern (wider)\n- Islands: Andaman & Nicobar (Bay of Bengal), Lakshadweep (Arabian Sea)\n\n## Major Rivers\n- Himalayan (perennial): Ganga, Yamuna, Brahmaputra\n- Peninsular (seasonal): Godavari, Krishna, Cauvery\n\nPractice: Name states through which Ganga flows from origin to Bay of Bengal." },
+    { title: "Democracy and Constitution", duration: "20 min", type: "video", content: "# Democracy and Constitution\n\n## What is Democracy?\nGovernment of the people, by the people, for the people.\n\n## Indian Constitution\n- Adopted: 26 November 1949\n- Enforced: 26 January 1950 (Republic Day)\n- Drafted by: Dr. B.R. Ambedkar\n\n## Key Features\n- Sovereign, Socialist, Secular, Democratic, Republic\n- Fundamental Rights: Equality, Freedom, Education\n\n## Three Organs\n- Legislature: makes laws (Parliament)\n- Executive: implements laws (President, PM)\n- Judiciary: interprets laws (Supreme Court)\n\nPractice: What are the 6 Fundamental Rights in the Indian Constitution?" },
+  ],
+});
+
+sampleCourses.push({
+  title: "English Literature Class 6-8",
+  description: "Prose, poetry, comprehension, essay writing and creative expression for middle school.",
+  category: "English", educationGroup: "class6to8", language: "English", level: "beginner",
+  duration: "5 hours", instructor: "Ms. Rekha Nair",
+  tags: ["english", "literature", "grammar", "class6", "class8"], enrolledCount: 11000, rating: 4.6, reviewCount: 1100,
+  whatYouLearn: ["Read and analyse prose passages", "Understand and write poetry", "Master essay and letter writing", "Improve grammar and vocabulary"],
+  lessons: [
+    { title: "Reading Comprehension", duration: "20 min", type: "video", content: "# Reading Comprehension\n\n## Steps to Solve\n1. Read the passage carefully (at least twice)\n2. Understand the main idea\n3. Read each question carefully\n4. Find the answer in the passage\n5. Write in your own words\n\n## Types of Questions\n- Factual: answer directly from passage\n- Inferential: read between the lines\n- Vocabulary: meaning of words in context\n- Title/Theme: identify central idea\n\n## Tips\n- Underline key sentences while reading\n- Answer in complete sentences\n- Use words from the question in your answer\n\nPractice: Read any newspaper article and write 5 questions based on it." },
+    { title: "Essay and Letter Writing", duration: "25 min", type: "video", content: "# Essay and Letter Writing\n\n## Essay Structure\n1. Introduction: introduce the topic\n2. Body: main points, one paragraph each\n3. Conclusion: summarise and give opinion\n\n## Formal Letter Format\nSender Address > Date > Receiver > Subject > Dear Sir/Madam > Body > Yours faithfully > Name\n\n## Informal Letter Format\nSender Address > Date > Dear [Name] > Body > Yours lovingly > Name\n\n## Tips\n- Use clear simple language\n- Start each paragraph with topic sentence\n- Use connecting words: however, therefore, moreover\n\nPractice: Write a formal letter to your principal requesting a week's leave." },
+  ],
+});
+
+// ── Class 9-10 Extra ──────────────────────────────────────────────────────────
+sampleCourses.push({
+  title: "Social Science Class 9-10 (CBSE)",
+  description: "History, Geography, Political Science and Economics — complete SST for board exams.",
+  category: "Social Science", educationGroup: "class9to10", language: "Hindi", level: "intermediate",
+  duration: "14 hours", instructor: "Mr. Vivek Pandey",
+  tags: ["sst", "history", "geography", "class9", "class10", "cbse"], enrolledCount: 26000, rating: 4.6, reviewCount: 2600,
+  whatYouLearn: ["Study French Revolution and Nationalism", "Understand Indian and world geography", "Learn democracy and political science", "Study money, banking and development"],
+  lessons: [
+    { title: "French Revolution", duration: "35 min", type: "video", content: "# French Revolution (1789)\n\n## Causes\n- Political: absolute monarchy, no representation\n- Social: three estates — clergy, nobility, commoners\n- Economic: heavy taxes on Third Estate, food shortage\n- Intellectual: ideas of Rousseau, Voltaire, Montesquieu\n\n## Key Events\n- 1789: Estates General convened\n- 14 July 1789: Storming of Bastille\n- Declaration of Rights of Man and Citizen\n- Reign of Terror under Robespierre\n- Rise of Napoleon Bonaparte\n\n## Impact\n- End of monarchy, rise of republic\n- Ideas of Liberty, Equality, Fraternity spread worldwide\n- Inspired revolutions across Europe and Latin America\n\nBoard Tip: Know the causes, events and impact in sequence.\nPractice: Why is 14 July celebrated as Bastille Day in France?" },
+    { title: "Resources and Development", duration: "30 min", type: "video", content: "# Resources and Development\n\n## What is a Resource?\nAnything that can be used to satisfy human needs.\n\n## Types of Resources\n- Natural: land, water, forests, minerals\n- Human: people with skills and knowledge\n- Man-made: buildings, machines, technology\n\n## Classification\n- Renewable: solar, wind, water (replenished naturally)\n- Non-renewable: coal, petroleum (take millions of years)\n- Biotic: living (forests, animals)\n- Abiotic: non-living (rocks, minerals)\n\n## Land Use\n- Forest land, agricultural land, wasteland\n- Land degradation: deforestation, overgrazing, mining\n\n## Soil Types in India\n- Alluvial: most fertile, found in plains\n- Black (Regur): good for cotton, Deccan plateau\n- Red and Yellow: less fertile, eastern India\n- Laterite: found in high rainfall areas\n\nPractice: Distinguish between renewable and non-renewable resources with 2 examples each." },
+    { title: "Democracy and Elections", duration: "25 min", type: "video", content: "# Democracy and Elections\n\n## What Makes a Democracy?\n- Free and fair elections\n- One person one vote\n- Rule of law\n- Protection of rights\n- Independent judiciary\n\n## Indian Electoral System\n- Universal Adult Franchise: every citizen 18+ can vote\n- Election Commission: independent body that conducts elections\n- Lok Sabha: 543 seats, elected every 5 years\n- Rajya Sabha: 245 seats, permanent house\n\n## Political Parties\n- National parties: recognised across India\n- State parties: recognised in specific states\n- Role: contest elections, form government, provide opposition\n\n## Challenges to Democracy\n- Corruption, criminalisation of politics\n- Communalism, casteism\n- Illiteracy, poverty\n\nPractice: Why is the Election Commission important for democracy?" },
+  ],
+});
+
+sampleCourses.push({
+  title: "English Class 9-10 (CBSE)",
+  description: "Literature, grammar, writing skills and reading comprehension for Class 9 and 10 boards.",
+  category: "English", educationGroup: "class9to10", language: "English", level: "intermediate",
+  duration: "10 hours", instructor: "Ms. Priya Menon",
+  tags: ["english", "class9", "class10", "cbse", "grammar", "literature"], enrolledCount: 20000, rating: 4.6, reviewCount: 2000,
+  whatYouLearn: ["Analyse prose and poetry", "Write formal letters and essays", "Master grammar for board exams", "Score full marks in reading section"],
+  lessons: [
+    { title: "Grammar — Tenses and Voice", duration: "30 min", type: "video", content: "# Grammar — Tenses and Voice\n\n## Tenses\n### Present\n- Simple: I eat\n- Continuous: I am eating\n- Perfect: I have eaten\n- Perfect Continuous: I have been eating\n\n### Past\n- Simple: I ate\n- Continuous: I was eating\n- Perfect: I had eaten\n\n### Future\n- Simple: I will eat\n- Continuous: I will be eating\n- Perfect: I will have eaten\n\n## Active and Passive Voice\nActive: Subject does the action\nPassive: Subject receives the action\n\nActive: Ram wrote the letter.\nPassive: The letter was written by Ram.\n\n## Rules for Passive\n- Object becomes subject\n- Add 'by' before original subject\n- Change verb to past participle\n- Use appropriate 'be' verb\n\nPractice: Convert 5 active sentences to passive and 5 passive to active." },
+    { title: "Letter Writing and Notice", duration: "25 min", type: "video", content: "# Letter Writing and Notice\n\n## Formal Letter (Board Format)\nSender Address\nDate\nReceiver Designation + Address\nSubject: (underlined)\nDear Sir/Madam,\nParagraph 1: Purpose\nParagraph 2: Details\nParagraph 3: Request/Action\nYours faithfully,\nName\n\n## Types of Formal Letters\n- Complaint letter\n- Application for job\n- Letter to editor\n- Order/enquiry letter\n\n## Notice Writing\nFormat: Organisation Name > NOTICE > Date > Title > Body > Name/Designation\n\nTips:\n- Word limit: 50 words for notice\n- Use formal language\n- Include: who, what, when, where\n\nPractice: Write a notice for your school announcing Annual Sports Day." },
+  ],
+});
+
+sampleCourses.push({
+  title: "Science Class 6-8 (NCERT)",
+  description: "Force, motion, light, sound, cells — complete middle school science with experiments.",
+  category: "Science", educationGroup: "class6to8", language: "English", level: "beginner",
+  duration: "8 hours", instructor: "Mrs. Sunita Verma",
+  tags: ["science", "class6", "class7", "class8", "ncert"], enrolledCount: 18000, rating: 4.7, reviewCount: 1800,
+  whatYouLearn: ["Understand force and motion", "Learn about light and sound", "Study cell structure", "Explore reproduction in plants"],
+  lessons: [
+    { title: "Force and Motion", duration: "25 min", type: "video", content: `# Force and Motion\n\n## What is Force?\nForce is a push or pull that changes the state of rest or motion of an object.\n- Unit: Newton (N)\n- Formula: F = m x a\n\n## Types of Force\n- Contact force: friction, normal force, tension\n- Non-contact force: gravity, magnetic force, electrostatic force\n\n## Speed and Velocity\n- Speed = Distance / Time\n- Velocity = Displacement / Time (has direction)\n\n📌 Practice: A car travels 120 km in 2 hours. Find its speed.` },
+    { title: "Light and Shadow", duration: "20 min", type: "video", content: `# Light and Shadow\n\n## Properties of Light\n- Travels in straight lines at 3 x 10^8 m/s\n- Can be reflected and refracted\n\n## Reflection\n- Angle of incidence = Angle of reflection\n\n## Refraction\n- Bending of light when passing from one medium to another\n- Example: pencil appears bent in water\n\n📌 Practice: Why does a straw appear bent in a glass of water?` },
+    { title: "Cell — Basic Unit of Life", duration: "25 min", type: "video", content: `# Cell — Basic Unit of Life\n\n## What is a Cell?\nThe cell is the smallest structural and functional unit of life.\n\n## Plant Cell vs Animal Cell\n- Plant cell has cell wall, chloroplast, large vacuole\n- Animal cell has no cell wall, small vacuole\n\n## Key Organelles\n- Nucleus: controls cell activities\n- Mitochondria: energy production\n- Chloroplast: photosynthesis (plants only)\n- Ribosome: protein synthesis\n\n📌 Practice: Draw and label a plant cell with 6 organelles.` },
+  ],
+});
+
 sampleCourses.push({
   title: "Class 10 Mathematics (CBSE)",
   description: "Complete Class 10 Maths — Real Numbers, Polynomials, Quadratics, Trigonometry, Statistics.",
@@ -2394,5 +2577,115 @@ The x-coordinate of the intersection of both ogives gives the median.
 Marks: 10-20, 20-30, 30-40, 40-50, 50-60
 Frequency: 5, 8, 15, 10, 2`,
     },
+  ],
+});
+
+// ── Class 11 Extra ────────────────────────────────────────────────────────────
+sampleCourses.push({
+  title: "Chemistry Class 11 (CBSE)",
+  description: "Atomic structure, chemical bonding, thermodynamics and organic chemistry basics.",
+  category: "Chemistry", educationGroup: "class11", language: "Hindi", level: "intermediate",
+  duration: "14 hours", instructor: "Dr. Priya Singh",
+  tags: ["chemistry", "class11", "cbse", "atomic structure", "bonding"], enrolledCount: 24000, rating: 4.7, reviewCount: 2400,
+  whatYouLearn: ["Understand atomic structure", "Master chemical bonding", "Study thermodynamics", "Learn organic basics"],
+  lessons: [
+    { title: "Atomic Structure", duration: "35 min", type: "video", content: "# Atomic Structure\n\nBohr Model: E = -13.6/n^2 eV, r = 0.529 x n^2 Angstrom\n\nQuantum Numbers: n (energy), l (subshell), m (orientation), s (spin)\n\nRules: Aufbau (lowest energy first), Pauli exclusion, Hund's rule\n\nOrder: 1s 2s 2p 3s 3p 4s 3d 4p\n\nPractice: Write electronic configuration of Fe (Z=26) and Cu (Z=29)." },
+    { title: "Chemical Bonding", duration: "35 min", type: "video", content: "# Chemical Bonding\n\nIonic Bond: transfer of electrons, e.g. NaCl, MgO. High MP, conducts in molten state.\n\nCovalent Bond: sharing of electrons between non-metals. Single H-H, Double O=O, Triple N-N.\n\nVSEPR: BeCl2 linear, BF3 trigonal planar, CH4 tetrahedral, NH3 pyramidal, H2O bent.\n\nHybridisation: sp linear, sp2 trigonal planar, sp3 tetrahedral.\n\nPractice: Predict shape and hybridisation of PCl5 and SF6." },
+  ],
+});
+
+sampleCourses.push({
+  title: "Mathematics Class 11 (CBSE)",
+  description: "Sets, relations, trigonometry, complex numbers, permutations and calculus introduction.",
+  category: "Mathematics", educationGroup: "class11", language: "English", level: "intermediate",
+  duration: "18 hours", instructor: "Mr. Anand Prakash",
+  tags: ["maths", "class11", "cbse", "trigonometry", "calculus", "sets"], enrolledCount: 28000, rating: 4.8, reviewCount: 2800,
+  whatYouLearn: ["Master sets and relations", "Solve trigonometric equations", "Work with complex numbers", "Understand limits and derivatives"],
+  lessons: [
+    { title: "Sets and Relations", duration: "30 min", type: "video", content: "# Sets and Relations\n\nSet: well-defined collection of distinct objects.\n\nOperations: Union (A+B), Intersection (A&B), Difference (A-B), Complement (A')\n\nFormula: n(AuB) = n(A) + n(B) - n(AnB)\n\nRelation types: reflexive, symmetric, transitive, equivalence.\n\nPractice: If A={1,2,3} B={2,3,4}, find union, intersection, difference." },
+    { title: "Trigonometric Functions", duration: "40 min", type: "video", content: "# Trigonometric Functions\n\nRadian: 1 radian = 180/pi degrees\n\nASTC rule: Q1 all positive, Q2 sin, Q3 tan, Q4 cos.\n\nIdentities: sin^2x + cos^2x = 1, 1 + tan^2x = sec^2x\n\nCompound: sin(A+B) = sinA cosB + cosA sinB\n\nDouble angle: sin2A = 2sinA cosA, cos2A = cos^2A - sin^2A\n\nPractice: Prove sin3A = 3sinA - 4sin^3A." },
+  ],
+});
+
+// ── Class 12 Extra ────────────────────────────────────────────────────────────
+sampleCourses.push({
+  title: "Mathematics Class 12 (CBSE)",
+  description: "Matrices, calculus, vectors, 3D geometry and probability — complete Class 12 Maths.",
+  category: "Mathematics", educationGroup: "class12", language: "English", level: "advanced",
+  duration: "20 hours", instructor: "Mr. Anand Prakash",
+  tags: ["maths", "class12", "cbse", "calculus", "matrices", "probability"], enrolledCount: 35000, rating: 4.8, reviewCount: 3500, featured: true,
+  whatYouLearn: ["Master matrices and determinants", "Differentiate and integrate functions", "Solve vector problems", "Calculate probability"],
+  lessons: [
+    { title: "Matrices and Determinants", duration: "40 min", type: "video", content: "# Matrices and Determinants\n\nTypes: Row (1xn), Column (mx1), Square (m=n), Identity, Zero.\n\nOperations: Addition (same order), Multiplication A(mxn) x B(nxp) = C(mxp), Transpose.\n\nDeterminant 2x2: |A| = ad - bc\n\nInverse: A^-1 = adj(A) / |A|\n\nPractice: Find inverse of [[2,1],[5,3]]." },
+    { title: "Differentiation", duration: "45 min", type: "video", content: "# Differentiation\n\nRules: d/dx(x^n)=nx^(n-1), d/dx(e^x)=e^x, d/dx(ln x)=1/x, d/dx(sin x)=cos x\n\nChain Rule: d/dx[f(g(x))] = f'(g(x)).g'(x)\n\nProduct Rule: d/dx(uv) = u'v + uv'\n\nMaxima/Minima: f'(x)=0, f''(x)<0 max, f''(x)>0 min\n\nPractice: Find dy/dx for y = x^3 + 3x^2 - 5x + 2. Find maxima/minima." },
+    { title: "Integration", duration: "45 min", type: "video", content: "# Integration\n\nFormulas: int(x^n)=x^(n+1)/(n+1)+C, int(e^x)=e^x+C, int(sin x)=-cos x+C\n\nIntegration by Parts: ILATE rule — int(u dv) = uv - int(v du)\n\nDefinite Integral: int[a to b] f(x)dx = F(b) - F(a)\n\nPractice: Evaluate int(x^2+2x+1)dx and int[0 to pi] sin x dx." },
+  ],
+});
+
+sampleCourses.push({
+  title: "Physics Class 12 (CBSE)",
+  description: "Electrostatics, current electricity, magnetism, optics and modern physics for boards.",
+  category: "Physics", educationGroup: "class12", language: "Hindi", level: "advanced",
+  duration: "22 hours", instructor: "Mr. Nitin Vijay",
+  tags: ["physics", "class12", "cbse", "electrostatics", "optics", "modern physics"], enrolledCount: 40000, rating: 4.9, reviewCount: 4000, featured: true,
+  whatYouLearn: ["Solve electrostatics problems", "Understand current electricity", "Study optics", "Learn modern physics"],
+  lessons: [
+    { title: "Electrostatics", duration: "40 min", type: "video", content: "# Electrostatics\n\nCoulomb's Law: F = kq1q2/r^2, k = 9x10^9 Nm^2/C^2\n\nElectric Field: E = kQ/r^2, Unit N/C\n\nPotential: V = kQ/r, Unit Volt\n\nCapacitance: C = Q/V, Unit Farad\n\nParallel Plate: C = e0*A/d\n\nCombinations: Series 1/C=1/C1+1/C2, Parallel C=C1+C2\n\nPractice: Two charges 2uC and 3uC are 30cm apart. Find force." },
+    { title: "Ray Optics", duration: "40 min", type: "video", content: "# Ray Optics\n\nMirror Formula: 1/v + 1/u = 1/f, f=R/2, m=-v/u\n\nSnell's Law: n1 sin(t1) = n2 sin(t2)\n\nLens Formula: 1/v - 1/u = 1/f, Power P=1/f (Dioptre)\n\nTotal Internal Reflection: denser to rarer, angle > critical angle. Used in optical fibre.\n\nPractice: Object 30cm from convex lens f=10cm. Find image position and magnification." },
+  ],
+});
+
+// ── Graduate Extra ────────────────────────────────────────────────────────────
+sampleCourses.push({
+  title: "React.js for Beginners",
+  description: "Build modern web apps with React — components, hooks, state management and API integration.",
+  category: "Technology", educationGroup: "graduate", language: "English", level: "intermediate",
+  duration: "12 hours", instructor: "Mr. Hitesh Choudhary",
+  tags: ["react", "javascript", "frontend", "hooks", "web development"], enrolledCount: 15000, rating: 4.8, reviewCount: 1500,
+  whatYouLearn: ["Build React components", "Use useState and useEffect", "Fetch data from APIs", "Deploy React apps"],
+  prerequisites: ["HTML, CSS, JavaScript basics"],
+  lessons: [
+    { title: "React Fundamentals", duration: "35 min", type: "video", content: "# React Fundamentals\n\nReact is a JavaScript library for building UIs created by Facebook.\n\nComponent: function Welcome() { return <h1>Hello!</h1>; }\n\nJSX: const el = <h1>Hello, {name}!</h1>;\n\nProps: function Card({ title, desc }) { return <div><h2>{title}</h2><p>{desc}</p></div>; }\n\nPractice: Create a Profile component with name, age and city props." },
+    { title: "Hooks — useState and useEffect", duration: "40 min", type: "video", content: "# React Hooks\n\nuseState: const [count, setCount] = useState(0);\n\nuseEffect: runs side effects. [] = run once on mount.\nuseEffect(() => { fetch(url).then(r=>r.json()).then(setData); }, []);\n\nRules: only call at top level, only inside React functions.\n\nPractice: Build a todo app with add and delete using useState." },
+  ],
+});
+
+sampleCourses.push({
+  title: "Digital Marketing Fundamentals",
+  description: "SEO, social media marketing, Google Ads, email marketing and analytics for beginners.",
+  category: "Business", educationGroup: "graduate", language: "English", level: "beginner",
+  duration: "8 hours", instructor: "Ms. Neha Kapoor",
+  tags: ["digital marketing", "seo", "social media", "google ads", "analytics"], enrolledCount: 12000, rating: 4.6, reviewCount: 1200,
+  whatYouLearn: ["Understand SEO basics", "Run social media campaigns", "Set up Google Ads", "Analyse marketing data"],
+  lessons: [
+    { title: "SEO Fundamentals", duration: "30 min", type: "video", content: "# SEO Fundamentals\n\nSEO = Search Engine Optimisation. Improves website visibility in search results.\n\nTypes: On-page (content, keywords, meta tags), Off-page (backlinks), Technical (speed, mobile).\n\nTips: Title under 60 chars, meta description 150-160 chars, short keyword-rich URLs, alt text on images.\n\nPractice: Analyse any website using Google PageSpeed Insights and list 3 improvements." },
+    { title: "Social Media Marketing", duration: "25 min", type: "video", content: "# Social Media Marketing\n\nPlatforms: Instagram (visual, reels), Facebook (ads, groups), LinkedIn (B2B), YouTube (video).\n\nStrategy: 80/20 rule — 80% value, 20% promotion. Post consistently. Use 5-10 hashtags.\n\nAnalytics: Reach = people who saw post. Engagement rate = (engagement/reach) x 100.\n\nPractice: Create a 1-week content calendar for a fictional brand." },
+  ],
+});
+
+// ── Skills Extra ──────────────────────────────────────────────────────────────
+sampleCourses.push({
+  title: "Graphic Design with Canva",
+  description: "Create stunning posters, social media posts, resumes and presentations using Canva.",
+  category: "Design", educationGroup: "skills", language: "English", level: "beginner",
+  duration: "5 hours", instructor: "Ms. Pooja Mehta",
+  tags: ["canva", "graphic design", "poster", "social media", "design"], enrolledCount: 16000, rating: 4.7, reviewCount: 1600,
+  whatYouLearn: ["Navigate Canva interface", "Design social media posts", "Create professional resumes", "Make presentations"],
+  lessons: [
+    { title: "Getting Started with Canva", duration: "20 min", type: "video", content: "# Getting Started with Canva\n\nCanva is a free online design tool used by 100M+ people.\n\nDesign Principles: Alignment, Contrast, Repetition, Proximity.\n\nColour Theory: Use max 3 colours. Complementary = opposite on colour wheel.\n\nPractice: Create a birthday invitation card using a Canva template." },
+    { title: "Social Media Post Design", duration: "25 min", type: "video", content: "# Social Media Post Design\n\nSizes: Instagram post 1080x1080px, Story 1080x1920px, YouTube thumbnail 1280x720px.\n\nTypography: Max 2 fonts. Pair serif + sans-serif. Big headline, smaller body.\n\nTips: High contrast text, minimal text, white space, add logo/watermark.\n\nPractice: Design 3 Instagram posts for a fictional food brand." },
+  ],
+});
+
+sampleCourses.push({
+  title: "Financial Literacy for Students",
+  description: "Budgeting, saving, investing basics, credit cards and personal finance for young adults.",
+  category: "Commerce", educationGroup: "skills", language: "English", level: "beginner",
+  duration: "5 hours", instructor: "Mr. Ankit Agarwal",
+  tags: ["finance", "budgeting", "investing", "saving", "personal finance"], enrolledCount: 13000, rating: 4.8, reviewCount: 1300,
+  whatYouLearn: ["Create a personal budget", "Understand saving and investing", "Learn about credit and loans", "Manage money smartly"],
+  lessons: [
+    { title: "Budgeting and Saving", duration: "25 min", type: "video", content: "# Budgeting and Saving\n\n50/30/20 Rule: 50% Needs, 30% Wants, 20% Savings.\n\nEmergency Fund: 3-6 months expenses in separate account.\n\nTips: Pay yourself first, automate savings, avoid lifestyle inflation, cancel unused subscriptions.\n\nPractice: Create a monthly budget for a student with Rs 5000 pocket money." },
+    { title: "Investing Basics", duration: "30 min", type: "video", content: "# Investing Basics\n\nWhy invest? Inflation ~6% erodes money. Investing grows wealth.\n\nTypes: FD (6-7%), Mutual Funds (10-15%), Stocks (high risk/reward), Gold (inflation hedge).\n\nSIP: Rs 1000/month at 12% for 20 years = Rs 9.99 lakhs (power of compounding).\n\nStart: Open Demat (Zerodha/Groww), start with index funds, invest via SIP, stay long term.\n\nPractice: Calculate Rs 500/month SIP at 12% after 10 years." },
   ],
 });

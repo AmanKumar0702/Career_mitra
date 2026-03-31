@@ -32,14 +32,14 @@ export default function AnimatedBackground() {
       r: number; color: string;
     };
 
-    const PARTICLE_COUNT = 120;
+    const PARTICLE_COUNT = 160;
     const particles: Particle[] = [];
 
     const cyanColor   = isDark ? "6,182,212"   : "8,145,178";
     const indigoColor = isDark ? "99,102,241"  : "79,70,229";
     const slateColor  = isDark ? "148,163,184" : "100,116,139";
 
-    const colorPool = [cyanColor, cyanColor, indigoColor, cyanColor, slateColor];
+    const colorPool = [cyanColor, cyanColor, indigoColor, cyanColor, slateColor, indigoColor];
 
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       particles.push({
@@ -56,9 +56,9 @@ export default function AnimatedBackground() {
 
     // ── Orbs ───────────────────────────────────────────────────
     const orbs = [
-      { cx: W * 0.15, cy: H * 0.25, r: 300, color: cyanColor,   alpha: isDark ? 0.12 : 0.08, angle: 0,   speed: 0.0005 },
-      { cx: W * 0.85, cy: H * 0.65, r: 350, color: indigoColor, alpha: isDark ? 0.10 : 0.07, angle: 2,   speed: 0.0004 },
-      { cx: W * 0.5,  cy: H * 0.5,  r: 250, color: cyanColor,   alpha: isDark ? 0.08 : 0.05, angle: 4,   speed: 0.0007 },
+      { cx: W * 0.15, cy: H * 0.25, r: 300, color: cyanColor,   alpha: isDark ? 0.18 : 0.12, angle: 0,   speed: 0.0005 },
+      { cx: W * 0.85, cy: H * 0.65, r: 350, color: indigoColor, alpha: isDark ? 0.15 : 0.10, angle: 2,   speed: 0.0004 },
+      { cx: W * 0.5,  cy: H * 0.5,  r: 250, color: cyanColor,   alpha: isDark ? 0.12 : 0.08, angle: 4,   speed: 0.0007 },
     ];
 
     let mouse = { x: -999, y: -999 };
@@ -115,7 +115,7 @@ export default function AnimatedBackground() {
           const dy = a.py - b.py;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < MAX_DIST) {
-            const alpha = (1 - dist / MAX_DIST) * (isDark ? 0.25 : 0.15) * Math.min(a.scale, b.scale) * 2;
+            const alpha = (1 - dist / MAX_DIST) * (isDark ? 0.4 : 0.25) * Math.min(a.scale, b.scale) * 2;
             ctx.beginPath();
             ctx.moveTo(a.px, a.py);
             ctx.lineTo(b.px, b.py);
@@ -129,7 +129,7 @@ export default function AnimatedBackground() {
       // ── Draw particles ──
       proj.forEach(({ px, py, scale, p }) => {
         const r = Math.max(p.r * scale * 1.5, 1);
-        const alpha = isDark ? 0.7 * scale + 0.1 : 0.5 * scale + 0.1;
+        const alpha = isDark ? 0.9 * scale + 0.15 : 0.7 * scale + 0.15;
 
         // Glow halo
         const glow = ctx.createRadialGradient(px, py, 0, px, py, r * 4);
@@ -189,7 +189,7 @@ export default function AnimatedBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 0 }}
+      style={{ zIndex: 1 }}
     />
   );
 }

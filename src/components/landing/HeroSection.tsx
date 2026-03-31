@@ -3,7 +3,34 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Sparkles, BookOpen, Target, Briefcase, Star, TrendingUp, Flame, Zap, Trophy, Award } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import LiveActivityFeed from "@/components/landing/LiveActivityFeed";
+
+const rotatingWords = ["Career", "Future", "Skills", "Success"];
+
+function RotatingWord() {
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setIndex((i) => (i + 1) % rotatingWords.length), 2000);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <span className="relative inline-block overflow-hidden" style={{ minWidth: "220px" }}>
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={rotatingWords[index]}
+          initial={{ y: 40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -40, opacity: 0 }}
+          transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+          className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-indigo-500"
+        >
+          {rotatingWords[index]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
 
 const floatingCards = [
   { icon: BookOpen,  label: "500+ Courses", color: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600" },
@@ -30,6 +57,7 @@ export default function HeroSection() {
   const completedCourses = user?.completedCourses?.length || 0;
   const level = Math.floor(xp / 500) + 1;
   const xpPercent = Math.min(100, ((xp % 500) / 500) * 100);
+  const dataReady = !!user;
 
   const previewStats = [
     { icon: Flame, label: "Streak", value: streak.toString(), color: "text-orange-500", bg: "bg-orange-50 dark:bg-orange-900/30" },
@@ -54,7 +82,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-cyan-50 via-white to-indigo-50 dark:from-[#0a0f1e] dark:via-[#0a0f1e] dark:to-[#0d1526] pt-20 pb-32">
+    <section className="relative overflow-hidden bg-gradient-to-br from-cyan-50/80 via-white/70 to-indigo-50/80 dark:from-[#0a0f1e]/60 dark:via-[#0a0f1e]/60 dark:to-[#0d1526]/60 pt-20 pb-32" style={{ zIndex: 2 }}>
 
       {/* Background glows */}
       <motion.div
@@ -78,32 +106,75 @@ export default function HeroSection() {
 
           {/* ── Left: Text ── */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-flex items-center gap-2 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-400 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-              <Sparkles className="w-4 h-4" /> AI-Powered Career Platform for Students
-            </span>
+            {isLoggedIn ? (
+              <motion.span
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4 }}
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500/10 to-indigo-500/10 border border-cyan-400/30 text-cyan-600 dark:text-cyan-400 text-sm font-semibold px-4 py-1.5 rounded-full mb-6"
+              >
+                <motion.span animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}>
+                  <Flame className="w-4 h-4 text-orange-500" />
+                </motion.span>
+                {streak > 0 ? `${streak}-day streak! Keep it up` : "Welcome back! Start your streak"}
+              </motion.span>
+            ) : (
+              <span className="inline-flex items-center gap-2 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-400 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
+                <Sparkles className="w-4 h-4" /> AI-Powered Career Platform for Students
+              </span>
+            )}
 
             <h1 className="text-5xl sm:text-6xl font-extrabold text-gray-900 dark:text-white leading-tight mb-6">
               {isLoggedIn ? (
-                <>Welcome back,{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-indigo-500">
-                    {name.split(" ")[0]}
-                  </span>
-                </>
+                <AnimatePresence mode="wait">
+                  {dataReady ? (
+                    <motion.span
+                      key="welcome"
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="block"
+                    >
+                      Welcome back,{" "}
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-indigo-500">
+                        {name.split(" ")[0]}
+                      </span>
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="loading"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="block"
+                    >
+                      Welcome back,{" "}
+                      <span className="inline-block w-40 h-12 bg-gray-200 dark:bg-[#1e293b] rounded-xl animate-pulse align-middle" />
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               ) : (
-                <>Learn, Test &{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-indigo-500">
-                    Build Your Career
-                  </span>
-                </>
+                <>Build Your{" "}<RotatingWord /></>
               )}
             </h1>
 
-            <p className="text-xl text-gray-500 dark:text-slate-400 mb-8 leading-relaxed">
-              {isLoggedIn
-                ? `You're at Level ${level} with ${xp} XP. Keep learning to unlock new badges and opportunities!`
-                : "Learn2Earn helps students after 10th & 12th explore the right career path, develop skills, and land their first opportunity."
-              }
-            </p>
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={dataReady ? "desc-ready" : "desc-loading"}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                className="text-xl text-gray-500 dark:text-slate-400 mb-8 leading-relaxed"
+              >
+                {isLoggedIn
+                  ? dataReady
+                    ? `You're at Level ${level} with ${xp.toLocaleString()} XP. Keep learning to unlock new badges and opportunities!`
+                    : "Loading your progress..."
+                  : "Learn2Earn helps students after 10th & 12th explore the right career path, develop skills, and land their first opportunity."
+                }
+              </motion.p>
+            </AnimatePresence>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
               {isLoggedIn ? (
@@ -127,15 +198,66 @@ export default function HeroSection() {
               )}
             </div>
 
+            {!isLoggedIn && (
+              <div className="mb-6">
+                <LiveActivityFeed />
+              </div>
+            )}
+
             <div className="flex flex-wrap gap-3">
-              {floatingCards.map(({ icon: Icon, label, color }) => (
-                <div key={label} className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl shadow-sm border border-white/60 dark:border-[#1e293b] bg-white/80 dark:bg-[#0f172a]/80 backdrop-blur">
-                  <div className={`p-1.5 rounded-lg ${color}`}>
-                    <Icon className="w-4 h-4" />
+              {isLoggedIn ? (
+                // Animated stat pills for logged-in users
+                <>
+                  {[
+                    { icon: Flame, label: `${streak} Day Streak`, color: "text-orange-500", bg: "bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800/40", delay: 0 },
+                    { icon: Star, label: `${xp.toLocaleString()} XP`, color: "text-yellow-500", bg: "bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800/40", delay: 0.08 },
+                    { icon: TrendingUp, label: `Level ${level}`, color: "text-cyan-500", bg: "bg-cyan-50 dark:bg-cyan-900/20 border-cyan-200 dark:border-cyan-800/40", delay: 0.16 },
+                    { icon: Award, label: `${completedCourses} Courses`, color: "text-indigo-500", bg: "bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-800/40", delay: 0.24 },
+                  ].map(({ icon: Icon, label, color, bg, delay }) => (
+                    <motion.div
+                      key={label}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay }}
+                      whileHover={{ scale: 1.06, y: -2 }}
+                      className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl border ${bg} shadow-sm`}
+                    >
+                      <Icon className={`w-4 h-4 ${color}`} />
+                      <span className="font-semibold text-sm text-gray-700 dark:text-slate-300">{label}</span>
+                    </motion.div>
+                  ))}
+                  {/* XP progress bar */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.32 }}
+                    className="w-full mt-1"
+                  >
+                    <div className="flex justify-between text-xs text-gray-400 dark:text-slate-500 mb-1.5">
+                      <span>Level {level} → {level + 1}</span>
+                      <span className="text-cyan-500 font-semibold">{xp % 500} / 500 XP</span>
+                    </div>
+                    <div className="h-2 bg-gray-100 dark:bg-[#1e293b] rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${xpPercent}%` }}
+                        transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1], delay: 0.5 }}
+                        className="h-full rounded-full"
+                        style={{ background: "linear-gradient(90deg, #06b6d4, #6366f1)", boxShadow: "0 0 8px rgba(6,182,212,0.5)" }}
+                      />
+                    </div>
+                  </motion.div>
+                </>
+              ) : (
+                floatingCards.map(({ icon: Icon, label, color }) => (
+                  <div key={label} className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl shadow-sm border border-white/60 dark:border-[#1e293b] bg-white/80 dark:bg-[#0f172a]/80 backdrop-blur">
+                    <div className={`p-1.5 rounded-lg ${color}`}>
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <span className="font-semibold text-sm text-gray-700 dark:text-slate-300">{label}</span>
                   </div>
-                  <span className="font-semibold text-sm text-gray-700 dark:text-slate-300">{label}</span>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </motion.div>
 
@@ -200,40 +322,88 @@ export default function HeroSection() {
                       <p className="text-xs text-gray-400 dark:text-slate-500 mb-0.5">
                         {isLoggedIn ? "Welcome back" : "Example Dashboard"}
                       </p>
-                      <h3 className="font-bold text-gray-900 dark:text-white text-lg leading-tight">
-                        {isLoggedIn ? name : "Your Name Here"}
-                      </h3>
-                      <p className="text-xs text-cyan-500 font-semibold mt-0.5 flex items-center gap-1">
-                        <Zap className="w-3 h-3" /> Level {level}
-                      </p>
+                      <AnimatePresence mode="wait">
+                        {dataReady ? (
+                          <motion.h3
+                            key="name"
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4 }}
+                            className="font-bold text-gray-900 dark:text-white text-lg leading-tight"
+                          >
+                            {name}
+                          </motion.h3>
+                        ) : (
+                          <motion.div
+                            key="skeleton-name"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="h-5 w-32 bg-gray-200 dark:bg-[#1e293b] rounded-lg animate-pulse"
+                          />
+                        )}
+                      </AnimatePresence>
+                      <AnimatePresence mode="wait">
+                        {dataReady ? (
+                          <motion.p
+                            key="level"
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, delay: 0.1 }}
+                            className="text-xs text-cyan-500 font-semibold mt-0.5 flex items-center gap-1"
+                          >
+                            <Zap className="w-3 h-3" /> Level {level}
+                          </motion.p>
+                        ) : (
+                          <motion.div
+                            key="skeleton-level"
+                            className="h-3 w-16 bg-gray-100 dark:bg-[#1e293b] rounded mt-1 animate-pulse"
+                          />
+                        )}
+                      </AnimatePresence>
                     </div>
                     {/* Avatar */}
                     <div className="relative">
-                      <div
-                        className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-bold text-base"
-                        style={{
-                          background: "linear-gradient(135deg, #06b6d4, #6366f1)",
-                          boxShadow: "0 4px 16px rgba(6,182,212,0.4)",
-                        }}
-                      >
-                        {isLoggedIn ? initials : "?"}
-                      </div>
+                      <AnimatePresence mode="wait">
+                        {dataReady ? (
+                          <motion.div
+                            key="avatar"
+                            initial={{ opacity: 0, scale: 0.7 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.4, type: "spring", stiffness: 200 }}
+                            className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-bold text-base"
+                            style={{ background: "linear-gradient(135deg, #06b6d4, #6366f1)", boxShadow: "0 4px 16px rgba(6,182,212,0.4)" }}
+                          >
+                            {initials}
+                          </motion.div>
+                        ) : (
+                          <motion.div
+                            key="skeleton-avatar"
+                            className="w-12 h-12 rounded-2xl bg-gray-200 dark:bg-[#1e293b] animate-pulse"
+                          />
+                        )}
+                      </AnimatePresence>
                       <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white dark:border-[#0f172a]" />
                     </div>
                   </div>
 
                   {/* Stats row */}
                   <div className="relative grid grid-cols-3 gap-2 mb-5">
-                    {previewStats.map(({ icon: Icon, label, value, color, bg }) => (
-                      <div
+                    {previewStats.map(({ icon: Icon, label, value, color, bg }, i) => (
+                      <motion.div
                         key={label}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={dataReady ? { opacity: 1, y: 0 } : { opacity: 0.4, y: 0 }}
+                        transition={{ duration: 0.4, delay: i * 0.08 }}
                         className={`${bg} rounded-2xl p-3 text-center`}
                         style={{ border: "1px solid rgba(6,182,212,0.1)" }}
                       >
                         <Icon className={`w-4 h-4 mx-auto mb-1 ${color}`} />
-                        <div className="font-bold text-gray-900 dark:text-white text-sm">{value}</div>
+                        <div className="font-bold text-gray-900 dark:text-white text-sm">
+                          {dataReady ? value : <span className="inline-block w-6 h-3 bg-gray-200 dark:bg-[#1e293b] rounded animate-pulse" />}
+                        </div>
                         <div className="text-[10px] text-gray-400 dark:text-slate-500">{label}</div>
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
 
